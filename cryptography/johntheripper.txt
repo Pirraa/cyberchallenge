@@ -1,0 +1,10 @@
+zip2john flag.zip > hash.txt
+sudo apt install libbz2-dev
+sudo apt install -y build-essential libssl-dev zlib1g-dev yasm pkg-config libgmp-dev libpcap-dev libbz2-dev
+git clone https://github.com/openwall/john -b bleeding-jumbo john-jumbo
+cd john-jumbo/src
+./configure
+make -sj8
+cd ../run
+./john --format=pkzip --wordlist=/usr/share/wordlists/rockyou.txt hash.txt
+

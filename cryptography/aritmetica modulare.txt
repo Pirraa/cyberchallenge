@@ -1,0 +1,63 @@
+Dobbiamo verificare se:
+489≡837(mod87)
+verifico se 837-489 è un multiplo di 87
+
+
+
+a = 51, b = 198, trova x,y tali che x*a + y*b == GCD(a,b)
+Passo 1: trovo GCD che è il massimo comune divisore
+Dividiamo 198 per 51 e troviamo il resto:
+198÷51=3 con resto 198−(51×3)=198−153=45
+Ora calcoliamo 
+gcd(51,45):51÷45=1 con resto 51−45=6
+51÷45=1 con resto 51−45=6
+Ora calcoliamo 
+gcd(45,6):
+45÷6=7 con resto 45−(6×7)=45−42=3
+Ora calcoliamo 
+gcd(6,3):
+6÷3=2 con resto 6−(3×2)=0
+Poiché l'ultimo resto è 0, abbiamo trovato che:
+gcd(51,198)=3
+Passo 2: Usare l'Algoritmo Esteso di Euclide per trovare x e y
+Ripercorriamo i passaggi all'indietro:
+3=45−7×6
+6=51−45
+3=45−7(51−45)=8×45−7×51
+Sostituiamo 
+45=198−3×51:
+3=8(198−3×51)−7×51
+3=8×198−24×51−7×51
+3=8×198−31×51
+Risultato:
+x=−31,y=8
+
+
+
+
+51 è invertibile mod 198?
+Un numero 𝑎 è invertibile modulo 𝑛se e solo se 
+gcd(a,n)=1, ovvero se il massimo comune divisore tra 𝑎e 𝑛 è 1.
+
+
+
+Qual è l'inverso di 92 modulo 183?
+risolviamo l'equazione 
+92x≡1(mod183) trovando x con l'algoritmo esteso.
+Ripercorriamo i passaggi dell'algoritmo di Euclide per esprimere 
+1 come combinazione lineare di 92 e 183:
+1=92−1×91
+Sostituiamo 91con 183−92 (dalla prima equazione 91=183−92):
+1=92−1×(183−92)
+1=92−1×183+1×92
+1=2×92−1×183
+Quindi 𝑥=2 è l'inverso di 92 modulo 183.
+
+
+
+Definiamo un'operazione che per convenienza qui denoteremo con ⊗ su due numeri a,b 
+a⊗b=a*b mod p
+Questa operazione 
+⊗ è la suddetta potenza discreta.
+Definiamo perciò il "logaritmo discreto di un numero x in base a" come quel numero b tale che 
+a⊗b=x cioè a*b mod p=x

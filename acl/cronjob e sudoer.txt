@@ -1,0 +1,40 @@
+Cos'è il cron?
+cron è un demone (un processo che gira in background) che si occupa di eseguire i cron job. I cron job sono definiti in un file di configurazione chiamato crontab. 
+Ogni utente del sistema può avere il proprio crontab, che contiene i comandi da eseguire.
+
+Struttura di una voce di crontab
+Un cron job in un crontab è scritto su una singola riga e ha la seguente sintassi:
+
+* * * * * /path/to/command
+| | | | |
+| | | | +---- Giorno della settimana (0 - 7) (dove 0 e 7 rappresentano la domenica)
+| | | +------ Mese (1 - 12)
+| | +-------- Giorno del mese (1 - 31)
+| +---------- Ora (0 - 23)
++------------ Minuto (0 - 59)
+Ad esempio:
+0 3 * * * /path/to/script.sh
+Questo cron job eseguirà lo script /path/to/script.sh ogni giorno alle 03:00 AM
+
+Puoi usare il comando crontab -l per vedere i cron job associati al tuo utente.
+Per i cron job di root, puoi eseguire sudo crontab -l o controllare i file specifici in /etc/cron.d/, /etc/crontab, /var/spool/cron/crontabs/.
+
+
+Se hai accesso in scrittura a questo file cron, modifica il file per eseguire il comando che preferisci.
+ Per esempio, un comando che esegue uno script bash per recuperare dati dal sistema potrebbe essere:
+exec /bin/bash -c "cat /root/flag.txt > /tmp/flag.txt"
+
+
+Se nella configurazione di sudo viene concessa la possibilità di eseguire determinati comandi senza password, o se l'accesso a comandi sensibili come cat, ls, 
+o altre operazioni sulla cartella /root è consentito, potresti riuscire a ottenere accesso alla cartella root.
+Ecco come potrebbe apparire una configurazione errata nel file sudoers:
+username ALL=(ALL) NOPASSWD: /bin/cat /root/*
+Con questa configurazione, l'utente username potrebbe eseguire cat su qualsiasi file nella cartella /root senza dover inserire una password di sudo.
+
+Controlla la configurazione di sudoers: Se hai accesso a sudo (o se puoi ottenere temporaneamente privilegi di root), puoi usare visudo per verificare il file di configurazione di sudoers.
+sudo visudo
+Oppure, se non hai sudo ma hai accesso a cat o altri strumenti, puoi visualizzare direttamente il file di configurazione:
+cat /etc/sudoers
+Oppure, cerca file di configurazione in /etc/sudoers.d/.
+Verifica se ci sono altri privilegi sudo concessi: Puoi usare il comando sudo -l per vedere quali comandi sono consentiti per l'utente corrente.
+sudo -l

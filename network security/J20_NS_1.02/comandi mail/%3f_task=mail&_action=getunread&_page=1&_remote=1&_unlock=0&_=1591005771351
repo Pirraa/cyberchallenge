@@ -1,0 +1,1 @@
+{"action":"getunread","exec":"this.set_unread_count(\"INBOX\",1,false);\nthis.set_unread_count(\"INBOX.Sent\",0,false);\nthis.set_unread_count(\"INBOX.Trash\",0,false);\nthis.set_trash_count(2);\n"}

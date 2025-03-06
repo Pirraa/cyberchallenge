@@ -1,0 +1,3 @@
+sudo apt update && sudo apt install squashfs-tools
+sudo unsquashfs -d /tmp/squashfs-root filesystem.squashfs
+isoinfo -i file.iso -x /percorso/nomefile

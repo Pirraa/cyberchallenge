@@ -1,0 +1,59 @@
+francesco@DESKTOP-1J2L0H3:~/cyber challenge$ file zk6uCiN6F9nhBMIA
+zk6uCiN6F9nhBMIA: bzip2 compressed data, block size = 900k
+francesco@DESKTOP-1J2L0H3:~/cyber challenge$ bunzip2 -c zk6uCiN6F9nhBMIA > output.txt
+
+Per file elf
+ghidra
+IDA pro
+./nome_del_file
+objdump -d nome_del_file
+readelf -a nome_del_file
+file nome_del_file
+strings nome_del_file
+binwalk nome_del_file
+
+ 115f:       c6 85 f0 fe ff ff 66    movb   $0x66,-0x110(%rbp)
+Queste istruzioni sono in assembly x86-64 e stanno caricando una stringa direttamente nella memoria usando l'istruzione movb 
+c6 85 XX XX XX XX YY
+c6 → Opcode dell'istruzione movb (sposta un byte in memoria).
+85 → Modalità di indirizzamento.
+XX XX XX XX → Offset della memoria relativa al rbp (base pointer).
+YY → Valore (un byte) da scrivere in memoria.
+
+
+comando ltrace, un tool che permette di tracciare le chiamate a funzione eseguite da un file binario. ltrace ./nome_del_binario
+il comando ltrace, in quanto funziona solamente con binari linkati dinamicamente.
+comando strace, un tool che permette di fare il trace delle syscalls eseguite da un binario.
+
+opzione -e che permette di filtrare le funzioni chiamate.
+ltrace -e function_name ./sw-08 2>&1 | grep -v "THisIsNotYourFlag" #filtra le chiamate  open che non contengono la strianga specificata
+ltrace -e "access" ./sw-10
+
+Se stai eseguendo un programma chiamato your_program, puoi tracciare tutte le syscall dei processi figli così:
+strace -f -e trace=all ./your_program
+ 
+int 3 è un istruzione che viene utilizzata dai debugger per mettere i breakpoint e fermare l'esecuzione del programma.
+Uno dei più famosi debugger, per ambienti linux, è gdb
+Apri con gdb il binario (gdb ./chall).
+Con il comando info registers puoi stampare lo stato dei registri della cpu
+Ad ogni momento puoi premere CTRL-C per mettere in pausa l'esecuzione del programma, per poi utilizzare continue per riprenderne l'esecuzione.
+
+
+Con gdb è possibile stampare il risultato di espressioni utilizzando il comando print
+La sua sintassi è print/f expr (f è x per esadecimale,f per float, u e d per interi)
+expr può essere un registro, come ad esempio $rax, o un'espressione
+
+
+Con gdb è possibile inserire breakpoint utilizzando l'istruzione break, abbreviata b.
+
+I due casi più frequenti sono break *addresse break function.
+Possiamo specificare address come offset rispetto ad una funzione, per esempio b *main+10 (10 byte dopo inizio main)
+
+istruzione disassemble function_name, che permette di disassemblare il contenuto di una funzione mostrando gli offset delle varie istruzioni
+
+
+Usando gdb è anche possibile cambiare il contenuto della memoria.
+
+Il comando da utilizzare in questo caso è set {type}address = value, dove type indica il tipo della variabile all'indirizzo address. Per esempio set {int}0x650000 = 0x42.
+
+Per trovare l'indirizzo di una variabile globale si può utilizzare il comando print insieme a &. Ad esempio p &var.

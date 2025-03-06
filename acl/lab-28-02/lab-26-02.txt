@@ -1,0 +1,64 @@
+ESEGUI container in modalità interattiva: 
+il container viene eseguito in modalità effimera, cioè tutti i cambiamenti (come la creazione di utenti) vengono persi quando esci.
+docker run -it ubuntu /bin/bash
+
+Se vuoi mantenere le modifiche, avvia il container con un nome specifico 
+docker run -it --name mio_ubuntu ubuntu /bin/bash
+
+se esci rientra con
+docker start -ai mio_ubuntu
+
+AGGIUNGI utente
+sudo useradd -m -s /bin/bash alice
+
+IMPOSTA password
+sudo passwd alice
+
+VISUALIZZA IL TUO gid e uid
+id
+
+
+Se sei connesso come un utente (es. alice) e vuoi passare a bob, usa:
+su - bob
+
+MOSTRA password hashate
+cat /etc/shadow | grep -e alice -e bob
+
+MOSTRA gruppo di utenti 
+cat /etc/group | grep -e alice -e bob
+
+CREA gruppo
+sudo groupadd bob
+
+IMPOSTA password gruppo
+sudo gpasswd bob
+
+AGGIUNGI utente al gruppo
+sudo usermod -aG bob bob
+
+Per avviare una nuova shell con il gruppo bob come principale:
+newgrp bob
+
+Per RIMUOVERE tutti i permessi al gruppo sul file appena creato, usa chmod
+chmod g= /home/bob/mydir/only-bob-can-delete-this.txt
+
+echo #!/bin/sh /usr/bin/env echo "I’am good" > /home/alice/i-am-good.sh
+
+PERMESSI
+chmod 600 myfilechmod 600 myfile
+
+PRPRIETARIO
+alice:~$ chown alice:student myfile 
+
+
+ACL FILE
+alice:~$ setfacl -m "u:carol:rw-" forcarol   # gives rw- permission to carol on file forcarol
+alice:~$ getfacl forcarol     # displays the ACL for 
+alice:~$ setfacl -b forcarol #remove acl
+
+
+DECRIPTARE SSL
+openssl enc -d -aes-256-cbc -in censored.bin -out decrypted.txt -pass pass:YOUR_PASSWORD
+
+DA BASE 64
+base64 -d censor.bin > decoded.bin #aggiungi flag -i per dire cche ignora cioò che non riesce a convertire

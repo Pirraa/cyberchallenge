@@ -1,0 +1,1 @@
+john.zip/flag.txt:$pkzip$1*1*2*0*3b*2b*e22d9e36*0*26*8*3b*0000*f8723ff6ee27d12ec376826b60f6d6138f50d8a78a89c01396ae8a4b979176a999e71e4497f6d107a05762ca98dcaf6ed162a4386b28b99f7b54f8*$/pkzip$:flag.txt:john.zip::../../../john.zip

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" class="iframe">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Roundcube Webmail :: Invoice</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1.0">
+<meta name="theme-color" content="#f4f4f4">
+<meta name="msapplication-navbutton-color" content="#f4f4f4">
+
+	<link rel="shortcut icon" href="skins/elastic/images/favicon.ico?s=1587930608">
+
+	<link rel="stylesheet" href="skins/elastic/deps/bootstrap.min.css?s=1587930641">
+			<link rel="stylesheet" href="skins/elastic/styles/styles.css?s=1587930608">
+		
+	<link rel="stylesheet" type="text/css" href="plugins/jqueryui/themes/elastic/jquery-ui.css?s=1587930607">
+<script src="program/js/jquery.min.js?s=1587930636"></script>
+<script src="program/js/common.min.js?s=1587930608"></script>
+<script src="program/js/app.min.js?s=1587930608"></script>
+<script>
+/*
+        @licstart  The following is the entire license notice for the 
+        JavaScript code in this page.
+
+        Copyright (C) The Roundcube Dev Team
+
+        The JavaScript code in this page is free software: you can redistribute
+        it and/or modify it under the terms of the GNU General Public License
+        as published by the Free Software Foundation, either version 3 of
+        the License, or (at your option) any later version.
+
+        The code is distributed WITHOUT ANY WARRANTY; without even the implied
+        warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+        See the GNU GPL for more details.
+
+        @licend  The above is the entire license notice
+        for the JavaScript code in this page.
+*/
+var rcmail = new rcube_webmail();
+rcmail.set_env({"task":"mail","standard_windows":false,"locale":"en_US","devel_mode":null,"rcversion":10404,"cookie_domain":"","cookie_path":"/","cookie_secure":false,"skin":"elastic","framed":true,"blankpage":"skins/elastic/watermark.html","refresh_interval":60,"session_lifetime":600,"action":"preview","comm_path":"./?_task=mail&_framed=1","user_id":"zuZkAA2lqXP5DK89","compose_extwin":false,"date_format":"yy-mm-dd","date_format_localized":"YYYY-MM-DD","uid":"6","safemode":false,"message_context":null,"message_flags":[],"sender":"CyberCapacitor \u003Cinvoice@cybercapacitor.it\u003E","mailbox":"INBOX","username":"pioppo","permaurl":"./?_task=mail&_action=show&_uid=6&_mbox=INBOX","has_writeable_addressbook":true,"delimiter":".","mimetypes":["text/plain","text/html","text/xml","image/jpeg","image/gif","image/png","image/bmp","image/webp","application/x-javascript","application/pdf","message/rfc822"],"read_when_deleted":true,"display_next":true,"drafts_mailbox":"INBOX.Drafts","trash_mailbox":"INBOX.Trash","junk_mailbox":"INBOX.Junk","optional_format":"text","mailboxes":{"INBOX":{"id":"INBOX","name":"Inbox","virtual":false,"class":"inbox"},"INBOX.Sent":{"id":"INBOX.Sent","name":"Sent","virtual":false,"class":"sent"},"INBOX.Trash":{"id":"INBOX.Trash","name":"Trash","virtual":false,"class":"trash"}},"mailboxes_list":["INBOX","INBOX.Sent","INBOX.Trash"],"attachments":{"2":"application/x-zip-compressed"},"request_token":"5o2pFye7OtQNOF2832ADBOCmYP5EX9Bk"});
+rcmail.add_label({"loading":"Loading...","servererror":"Server Error!","connerror":"Connection Error (Failed to reach the server)!","requesttimedout":"Request timed out","refreshing":"Refreshing...","windowopenerror":"The popup window was blocked!","uploadingmany":"Uploading files...","uploading":"Uploading file...","close":"Close","save":"Save","cancel":"Cancel","alerttitle":"Attention","confirmationtitle":"Are you sure...","delete":"Delete","continue":"Continue","ok":"OK","checkingmail":"Checking for new messages...","deletemessage":"Delete message","movemessagetotrash":"Move message to trash","movingmessage":"Moving message(s)...","deletingmessage":"Deleting message(s)...","markingmessage":"Marking message(s)...","replyall":"Reply all","replylist":"Reply list","bounce":"Resend","bouncemsg":"Resend (bounce)","sendingmessage":"Sending message...","back":"Back","errortitle":"An error occurred!","options":"Options","plaintoggle":"Plain text","htmltoggle":"HTML","previous":"Previous","next":"Next","select":"Select","browse":"Browse","choosefile":"Choose file...","choosefiles":"Choose files...","purgefolderconfirm":"Do you really want to delete all messages in this folder?","deletemessagesconfirm":"Do you really want to delete selected message(s)?","arialabelmessageheaders":"Message headers"});
+rcmail.set_unread_message("6","INBOX");
+rcmail.gui_container("headerlinks","header-links");
+rcmail.gui_container("attachmentmenu","attachmentmenu");
+rcmail.gui_container("mailtomenu","mailto-menu");rcmail.register_button('extwin', 'rcmbtn100', 'link', '', '', '');
+rcmail.register_button('change-format', 'rcmbtn101', 'link', '', '', '');
+rcmail.gui_object('attachments', 'attachment-list');
+rcmail.gui_object('remoteobjectsmsg', 'remote-objects-message');
+rcmail.register_button('open-attachment', 'attachmenuopen', 'link', 'extwin active', '', '');
+rcmail.register_button('download-attachment', 'attachmenudownload', 'link', 'download active', '', '');
+rcmail.gui_object('message', 'messagestack');
+</script>
+
+<script src="plugins/jqueryui/js/jquery-ui.min.js?s=1587930607"></script>
+
+</head>
+<body class="task-mail action-preview">
+	
+
+
+
+
+<h1 class="voice">Message preview</h1>
+
+<div id="layout-content" class="selected">
+		<div class="content frame-content" role="main">
+		<div id="message-header">
+			<h2 class="subject">
+				<span class="voice">Subject: </span>
+				Invoice
+									<a class="extwin" title="Open in new window" data-hidden="small" id="rcmbtn100" role="button" href="./?_task=mail&amp;_action=show&amp;_uid=6&amp;_mbox=INBOX" onclick="return rcmail.command('extwin','',this,event)"><span class="inner">Open in new window</span></a>
+							</h2>
+			<div class="short-header">
+				<img src="./?_task=addressbook&amp;_action=photo&amp;_email=invoice%40cybercapacitor.it&amp;_error=1" alt="Contact photo" class="contactphoto" onerror="this.src = 'skins/elastic/images/contactpic.svg'; this.onerror = null">
+				<div class="header-content">
+					<div class="header-subject"><span>From <span class="adr"><a href="mailto:invoice@cybercapacitor.it" class="rcmContactAddress" onclick="return rcmail.command('compose','CyberCapacitor &lt;invoice@cybercapacitor.it&gt;',this)" title="invoice@cybercapacitor.it">CyberCapacitor</a><a href="#add" title="Add to address book" class="rcmaddcontact" onclick="return rcmail.command('add-contact','CyberCapacitor &lt;invoice@cybercapacitor.it&gt;',this)"></a></span> on <span class="text-nowrap">2020-06-01 11:47</span></span></div>
+
+					<div class="message-partheaders hidden">
+						<table class="headers-table"><tbody><tr><td class="header-title">From</td>
+<td class="header from"><span class="adr"><a href="mailto:invoice@cybercapacitor.it" class="rcmContactAddress" onclick="return rcmail.command('compose','CyberCapacitor &lt;invoice@cybercapacitor.it&gt;',this)" title="invoice@cybercapacitor.it">CyberCapacitor</a><a href="#add" title="Add to address book" class="rcmaddcontact" onclick="return rcmail.command('add-contact','CyberCapacitor &lt;invoice@cybercapacitor.it&gt;',this)"></a></span></td>
+</tr>
+<tr><td class="header-title">To</td>
+<td class="header to"><span class="adr"><a href="mailto:pioppo@bobb.io" class="rcmContactAddress" onclick="return rcmail.command('compose','Mr Pioppo &lt;pioppo@bobb.io&gt;',this)" title="pioppo@bobb.io">Mr Pioppo</a><a href="#add" title="Add to address book" class="rcmaddcontact" onclick="return rcmail.command('add-contact','Mr Pioppo &lt;pioppo@bobb.io&gt;',this)"></a></span></td>
+</tr>
+<tr><td class="header-title">Date</td>
+<td class="header date">Today 11:47</td>
+</tr>
+</tbody>
+</table>
+
+						<a href="#all-headers" class="headers" onclick="return UI.headers_dialog()">All headers...</a>
+					</div>
+					<div class="header-links">
+						<a href="#headers" class="envelope" onclick="return UI.headers_show(this)">Details</a>
+						
+													<a class="plain" title="Display in plain text format" id="rcmbtn101" role="button" href="#" onclick="return rcmail.command('change-format','text',this,event)"><span class="inner">Plain text</span></a>
+						
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="message-content">
+			<div class="leftcol" role="region" aria-labelledby="aria-label-messageattachments">
+				<h2 id="aria-label-messageattachments" class="voice">Attachments</h2>
+				<ul id="attachment-list" class="attachmentslist"><li class="application x-zip-compressed zip" id="attach2"><a href="./?_task=mail&amp;_action=get&amp;_mbox=INBOX&amp;_uid=6&amp;_token=5o2pFye7OtQNOF2832ADBOCmYP5EX9Bk&amp;_part=2" onclick="return rcmail.command('load-attachment','2',this)" onmouseover="rcube_webmail.long_subject_title_ex(this, 0)" title="" class="filename"><span class="attachment-name">invoice.zip</span><span class="attachment-size">(~39 KB)</span></a></li>
+</ul>
+
+			</div>
+			<div class="rightcol" role="region" aria-labelledby="aria-label-messagebody">
+				<h2 id="aria-label-messagebody" class="voice">Message Body</h2>
+				<div id="message-objects">
+<div id="remote-objects-message" class="notice" style="display: none"><span>To protect your privacy remote resources have been blocked.</span>&nbsp;<span class="boxbuttons"><a href="#loadremote" onclick="rcmail.command('load-remote')">Allow</a></span></div>
+</div>
+
+				<div id="messagebody"><div class="message-htmlpart" id="message-htmlpart1"><!-- html ignored --><!-- head ignored --><!-- meta ignored -->
+    
+  
+  <div class="rcmBody">
+    <p>Dear Mr. Pioppo,</p>
+    <p>please find attached your invoice.</p>
+    <p>The archive is protected with the  password <img src="./?_task=mail&amp;_action=get&amp;_mbox=INBOX&amp;_uid=6&amp;_token=5o2pFye7OtQNOF2832ADBOCmYP5EX9Bk&amp;_part=1.2&amp;_embed=1&amp;_mimeclass=image" /> in
+      compliance with the European Regulation 2016/679 called General
+      Data Protection Regulation (GDPR).</p>
+    <p>Thank you.</p>
+    <p><br />
+    </p>
+  </div>
+</div>
+</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- popup menus -->
+<div id="attachmentmenu" class="popupmenu">
+	<h3 id="aria-label-attachmentmenu" class="voice">Attachment options</h3>
+	<ul class="menu listing" role="menu" aria-labelledby="aria-label-attachmentmenu">
+		<li role="menuitem"><a id="attachmenuopen" class="extwin disabled" role="button" tabindex="-1" aria-disabled="true" href="#" onclick="return rcmail.command('open-attachment','',this,event)">Open</a></li>
+		<li role="menuitem"><a id="attachmenudownload" class="download disabled" role="button" tabindex="-1" aria-disabled="true" href="#" onclick="return rcmail.command('download-attachment','',this,event)">Download</a></li>
+		
+	</ul>
+</div>
+
+<div id="mailto-menu" class="popupmenu">
+	<h3 id="aria-label-mailtomenu" class="voice">Email address options</h3>
+	<ul class="menu listing" role="menu" aria-labelledby="aria-label-mailtomenu">
+		<li role="menuitem"><a class="addressbook" id="rcmbtn102" role="button" tabindex="-1" aria-disabled="true" href="#">Add to address book</a></li>
+		<li role="menuitem"><a class="compose" id="rcmbtn103" role="button" tabindex="-1" aria-disabled="true" href="#">Compose mail to</a></li>
+		
+	</ul>
+</div>
+
+
+<div id="messagestack"></div>
+<script>
+$(function() {
+rcmail.init();
+});
+</script>
+
+
+
+<script src="skins/elastic/deps/bootstrap.bundle.min.js?s=1587930641"></script>
+<script src="skins/elastic/ui.min.js?s=1587930608"></script>
+
+</body>
+</html>

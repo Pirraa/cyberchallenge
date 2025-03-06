@@ -1,0 +1,1 @@
+Decoded JWT: {'flag': 'CCIT{69c0d20786470fe78ccef1a8e5f1077a}', 'nbf': 1653609121, 'exp': 1656391884}

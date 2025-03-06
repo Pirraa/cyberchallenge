@@ -1,0 +1,16 @@
+GET / HTTP/1.1
+user-agent: got (https://github.com/sindresorhus/got)
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmbGFnIjoiQ0NJVHtmZTlhMDRhZTczNWRlZDNjMDYyMzc5Y2NhODczZDM2ZH0iLCJuYmYiOjE2NTM3NjgwODYsImV4cCI6MTY1MzE1MTE3NX0.do2ZXUBWwVIvLwuOakmF8-9JAU0is3Z-dv6d5e-_cxw
+accept-encoding: gzip, deflate, br
+Host: 192.168.163.2:8080
+Connection: close
+
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: text/html; charset=utf-8
+Content-Length: 11
+ETag: W/"b-e1AsOh9IyGCa4hLN+2Od7jlnP14"
+Date: Mon, 23 May 2022 10:55:31 GMT
+Connection: close
+
+Hello world

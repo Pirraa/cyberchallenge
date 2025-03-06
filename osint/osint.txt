@@ -1,0 +1,12 @@
+entity id nel sorgente pagina per id facebook
+per trovare data immagine: su cyberchef 
+per trovare immagini : Yandex Images
+per trovare record dei domini (anche di tipo txt come per la challenge di libero) nslookup -type=TXT libero.it
+
+Puoi trovare il registrar di un dominio come libero.it utilizzando un servizio di WHOIS lookup. 
+WHOIS è un protocollo che consente di ottenere informazioni pubbliche sui domini Internet, inclusi il registrar, la data di registrazione e il proprietario (se non è nascosto).
+whois libero.it
+nslookup -type=NS libero.it
+Controllare lo storico dei WHOIS su servizi come https://whoisrequest.com/history/.
+Usare il Wayback Machine su web.archive.org per vedere vecchie pagine WHOIS.
+Verificare su nic.it, il registro ufficiale dei domini .it.

@@ -1,0 +1,46 @@
+LIBRERIE PYTHON
+sudo apt update && sudo apt upgrade
+sudo apt install python3
+python3 --version
+alias python=python3
+sudo apt install pip
+sudo apt install python3-venv
+python -m venv venv
+source venv/bin/activate
+pip3 install pwntools
+pip3 install requests
+pip3 install pycryptodome
+pip3 install pyshark
+pip3 install rstr
+
+
+TCPDUMP
+tcpdump -i eth0 port 80 host 192.168.1.20 -w http_traffic.pcap
+tcpdump -i eth0 icmp tcp udp
+tcdump -r cattura.pcap
+
+
+COMANDI TERMINALE
+capinfos leopardo.pcapng
+nc tcp.challs.olicyber.it 12210
+tshark -r leopardo.pcapng -Y "ip.addr == <web_server_IP>" -T fields -e tcp.port | sort -u
+tar -xvzf scenario.tar.gz
+
+
+
+FILTRI
+(ip.src == 192.168.1.1 or ip.dst == 192.168.1.2) and tcp
+ip.addr == 192.168.1.1 and tcp.port == 443
+frame.comment
+
+
+INTERFACCIA GRAFICA
+Configurare Wireshark per Usare il File di Chiavi
+Usare un SSLKEYLOGFILE (Più Affidabile)
+Se hai un file sslkeylogfile.txt, procedi così:
+Vai su Edit → Preferences
+Espandi Protocols → TLS
+Nel campo (Pre)-Master-Secret log filename, seleziona il file (sslkeylogfile.txt).
+Clicca OK e riapri il file .pcap
+
+

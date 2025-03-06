@@ -1,0 +1,69 @@
+version: "3"
+
+services:
+  node1:
+    build: 
+      context: ./ubuntu-ccit
+      dockerfile: Dockerfile
+    image: ubuntu-ccit
+    hostname: node1
+    privileged: true
+    volumes:
+      - ./src:/src
+    environment:
+      - ROOTPW=ccit
+    networks:
+      a00_ext:
+        ipv4_address: 192.168.168.123
+      a10_net1:
+        ipv4_address: 10.0.0.1
+
+  node2:
+    build: 
+      context: ./ubuntu-ccit
+      dockerfile: Dockerfile
+    image: ubuntu-ccit
+    hostname: node2
+    privileged: true
+    volumes:
+      - ./src:/src
+    environment:
+      - ROOTPW=ccit
+    networks:
+      a10_net1:
+        ipv4_address: 10.0.0.2
+      a20_net2:
+
+  node3:
+    build: 
+      context: ./ubuntu-ccit
+      dockerfile: Dockerfile
+    image: ubuntu-ccit
+    hostname: node3
+    privileged: true
+    volumes:
+      - ./src:/src
+    environment:
+      - ROOTPW=ccit
+    networks:
+      a20_net2:
+
+networks:
+  a00_ext:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.168.0/24
+
+  a10_net1:
+    driver: macvlan
+    driver_opts:
+      parent: eth1
+    ipam:
+      config:
+        - subnet: 10.0.0.0/24
+
+  a20_net2:
+    driver: macvlan
+    driver_opts:
+      parent: eth0

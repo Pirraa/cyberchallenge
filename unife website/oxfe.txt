@@ -1,0 +1,52 @@
+i bot di solito appaiono come uno dei contatti dell'utente, ma a volte possono agire come partecipanti a una chat di gruppo.
+
+ad esempio, a. l. i. c. e. utilizza un linguaggio di markup chiamato aiml, che è specifico per la sua funzione di agente conversazionale, 
+e da allora è stato adottato da vari altri sviluppatori di, i cosiddetti, alicebots
+
+i chatbot dannosi vengono spesso utilizzati per riempire le chat room di spam e pubblicità,
+
+imitando il comportamento umano e le conversazioni o per invogliare le persone a rivelare informazioni personali, come i numeri di conto bancario.
+
+un ecosistema aziendale di chatbot saas è in costante crescita dalla conferenza f8, quando zuckerberg ha svelato che messenger avrebbe permesso ai chatbot di entrare nell'app.
+
+d'altronde è pur sempre ancora un prototipo sviluppato da openai, una società di ricerca sull'intelligenza artificiale (un tempo non-profit) 
+che promuove lo sviluppo delle cosiddette ai amichevoli (friendly ai o fai) – intelligenze capaci di contribuire al bene dell'umanità, 
+ma con un meccanismo di evoluzione soggetto a precisi controlli ed equilibri, come ha teorizzato il ricercatore eliezer yudkowsky.
+
+tali programmi sono spesso progettati per simulare in modo convincente come un essere umano si comporterebbe come partner conversazionale, superando così il test di turing.
+
+ci sono stati 30.000 bot creati per messenger nei primi sei mesi, salendo a 100.000 entro settembre 2017.
+da settembre 2017, questo è stato anche come parte di un programma pilota su whatsapp.
+
+al fine di comprendere correttamente un input dell'utente in forma di testo libero, è possibile utilizzare un motore di elaborazione del linguaggio naturale.
+la seconda attività può comportare approcci diversi a seconda del tipo di risposta che il chatbot genererà.
+
+tuttavia, uno studio condotto da narrative science nel 2015 ha rilevato che l ' 80% degli intervistati ritiene che l'intelligenza artificiale migliori le prestazioni dei lavoratori e crei posti di lavoro.
+
+un chatbot (noto anche come talkbot, chatterbot, bot, im bot, agente interattivo o entità conversazionale artificiale) è un programma per computer o un'intelligenza artificiale 
+che conduce una conversazione tramite metodi uditivi o testuali.
+
+il design del chatbot è il processo che definisce l'interazione tra l'utente e il chatbot.il designer del chatbot definirà la personalità del chatbot, 
+le domande che verranno poste agli utenti e l'insieme interaction.it può essere visto come un sottoinsieme del design conversazionale.
+
+il test dell'utente può essere eseguito seguendo gli stessi principi che guidano il test dell'utente delle interfacce grafiche
+
+ ma una volta che un particolare programma viene smascherato, una volta spiegato il suo funzionamento interno ... la sua magia si sgretola; si rivela come una mera raccolta di procedure ... l'osservatore dice a se stesso:"avrei potuto scriverlo".
+
+
+
+
+Un chatbot (noto anche come talkbot, chatterbot, bot, IM bot, agente interattivo o entità conversazionale artificiale) è un programma per computer o un'intelligenza artificiale che conduce una conversazione tramite metodi uditivi o testuali.
+Tali programmi sono spesso progettati per simulare in modo convincente il comportamento umano, superando così il test di Turing.
+Al fine di comprendere correttamente un input dell'utente in forma di testo libero, è possibile utilizzare un motore di elaborazione del linguaggio naturale. La generazione delle risposte può seguire approcci diversi a seconda del tipo di chatbot e della sua funzione.
+Un esempio storico è A.L.I.C.E., che utilizza un linguaggio di markup chiamato AIML, specifico per la sua funzione di agente conversazionale. AIML è stato adottato da vari altri sviluppatori, creando i cosiddetti AliceBots.
+I chatbot nei social e nelle aziende
+Un ecosistema aziendale di chatbot SaaS è in costante crescita. Durante la conferenza F8, Mark Zuckerberg ha annunciato che Messenger avrebbe permesso l'integrazione dei chatbot. Nei primi sei mesi, sono stati creati 30.000 bot per Messenger, saliti a 100.000 entro settembre 2017. Da allora, i chatbot si sono diffusi anche su WhatsApp come parte di un programma pilota.
+Uno studio condotto da Narrative Science nel 2015 ha rilevato che l'80% degli intervistati ritiene che l'intelligenza artificiale migliori le prestazioni dei lavoratori e crei posti di lavoro.
+Rischi e usi dannosi dei chatbot
+Oltre agli usi legittimi, esistono chatbot dannosi, spesso utilizzati per riempire le chat room di spam e pubblicità, imitare il comportamento umano e le conversazioni, oppure invogliare le persone a rivelare informazioni personali (ad esempio numeri di conto bancario).
+L'evoluzione dell'intelligenza artificiale nei chatbot
+I chatbot si stanno evolvendo sempre di più grazie alla ricerca nel campo dell'intelligenza artificiale. OpenAI, ad esempio, ha sviluppato ChatGPT, un prototipo avanzato basato su reti neurali.
+OpenAI è una società di ricerca (un tempo non-profit) che promuove lo sviluppo di AI "amichevoli" (Friendly AI o FAI) – intelligenze capaci di contribuire al bene dell'umanità. Tuttavia, per garantire un'evoluzione controllata, si adottano sistemi di controllo ed equilibrio, come teorizzato dal ricercatore Eliezer Yudkowsky.
+I chatbot possono apparire come uno dei contatti dell'utente o come partecipanti a una chat di gruppo, a seconda della piattaforma e del loro utilizzo.
+

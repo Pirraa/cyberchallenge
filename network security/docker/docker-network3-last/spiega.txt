@@ -1,0 +1,7 @@
+faccio file docker-compose che definisce i due servizi e richiama i due docker file per scaricare le immagini
+frontend e backend stessa rete
+porta host 8080 mappata su porta 80 frontend che a sua volta comunica con porta 8080 del backend
+docker-compose up --build -d
+curl http://localhost:8080/flag
+docker-compose down
+

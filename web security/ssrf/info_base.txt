@@ -1,0 +1,38 @@
+Per capire come sfruttare questa vulnerabilità SSRF (Server-Side Request Forgery), vediamo attentamente il codice PHP che hai fornito. 
+sso consente a un attaccante di manipolare la richiesta HTTP tramite il parametro url nella query string, che il server poi usa per fare una richiesta HTTP (file_get_contents($url)).
+
+Funzionamento del Codice
+Controllo dell'URL:
+
+Quando viene fornito il parametro url, il codice verifica se il valore è una URL valida tramite filter_var($url, FILTER_VALIDATE_URL).
+Se l'URL non è valido, viene restituito l'errore "Not a valid URL".
+Inoltre, verifica se lo schema dell'URL è http o https (tramite parse_url($url)), il che significa che accetta solo URL HTTP/HTTPS.
+Caricamento del Contenuto:
+
+Se l'URL è valido e ha uno schema HTTP o HTTPS, il codice usa file_get_contents($url) per caricare il contenuto della risorsa remota.
+Scopo dell'Attacco SSRF
+Un attacco SSRF cerca di sfruttare questa funzionalità per indurre il server a fare richieste a URL che non dovrebbe fare, come ad esempio:
+
+Accedere a risorse interne del server (come localhost o 127.0.0.1).
+Tentare di ottenere file sensibili da altre risorse interne o esterne.
+Nel tuo caso, l'obiettivo è ottenere il contenuto del file /get_flag.php dal server. 
+Tuttavia, il server è probabilmente configurato per impedire l'accesso diretto a file sensibili, come un file di flag, 
+usando misure di sicurezza come una restrizione di accesso alle risorse interne.
+
+Perché usare  http://ssrf1.challs.cyberchallenge.it/?url=http://localhost/get_flag.php
+il server vulnerabile sta facendo una richiesta al server stesso (indicato da localhost). 
+La risorsa /get_flag.php potrebbe essere un file interno del server che contiene il flag. 
+Il server vulnerabile probabilmente non restituisce direttamente il file se la richiesta è fatta esternamente, ma potrebbe permettere di accederlo se la richiesta viene fatta internamente.
+
+
+L'utente malintenzionato invia una richiesta al server vulnerabile con una query string come
+http://ssrf1.challs.cyberchallenge.it/?url=http://localhost/get_flag.php
+Questo indica al server vulnerabile di fare una richiesta HTTP al proprio stesso server (localhost).
+
+Comportamento del Server:
+
+Il server riceve l'URL http://localhost/get_flag.php, che è una risorsa sul suo stesso server.
+Il codice PHP sulla macchina vulnerabile usa file_get_contents per ottenere il contenuto del file indicato.
+Se /get_flag.php è una risorsa valida (ad esempio, un file che contiene il flag), il server lo restituirà.
+Possibile Exploit: L'attaccante sta sfruttando questa vulnerabilità per accedere a file che normalmente non sarebbero accessibili dall'esterno
+(per esempio, i file di sistema, configurazioni, o file come /get_flag.php), ottenendo quindi il contenuto che potrebbe rivelare il flag.

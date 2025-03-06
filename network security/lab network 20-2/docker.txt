@@ -1,0 +1,8 @@
+docker build -t nome_immagine:tag .
+docker network create mynetwork
+docker run -d --name alpine2 --network mynetwork alpine sleep 1000
+docker exec -it alpine1 sh
+docker start alpine1
+extract files
+
+git clone "https://github.com/magnumripper/JohnTheRipper.git" && cd JohnTheRipper/src && ./configure && sudo make -s clean && sudo make -sj4 

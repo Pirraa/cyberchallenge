@@ -1,0 +1,7 @@
+Se non hai la chiave (key.png), ma hai le immagini cifrate (ad esempio, flag_enc.png e notflag_enc.png), puoi cercare di usare l'operazione XOR per recuperare la chiave o l'immagine originale. Esistono diverse tecniche che puoi provare, a seconda del contesto e delle informazioni a tua disposizione.
+
+Come funziona l'XOR:
+L'operazione XOR è simmetrica, il che significa che:
+
+Se hai una chiave e un testo cifrato, puoi ottenere il testo originale usando l'operazione XOR.
+Se hai due testi cifrati e conosci uno di essi (ad esempio, flag_enc.png), puoi cercare di ottenere la chiave facendo XOR tra il testo cifrato che conosci e l'altro testo cifrato (ad esempio, notflag_enc.png).
