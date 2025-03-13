@@ -1,0 +1,23 @@
+Now, let’s analyze the sequence you provided. The numbers you’ve given suggest a Linear Congruential Generator (LCG), 
+which is a type of pseudorandom number generator defined by the recurrence relation:
+
+sn+1 = ( m⋅ sn + c)mod n
+Where:
+m is the multiplier,
+c is the increment,
+n is the modulus,
+sn is the current state.
+
+Given:
+
+m=1076867677
+
+c=1265354953,
+
+n=2147483647,
+
+s=1862611659 (the current state).
+
+We can use this formula to generate the next 50 numbers in the sequence. Here’s how the sequence is computed:
+Start with s0=1862611659
+
