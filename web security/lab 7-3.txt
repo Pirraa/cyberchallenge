@@ -1,0 +1,3 @@
+path traversal: prova con ....// per eludere controllo del browser che accorcia percorso
+ssrf: prova con url tipo 0.0.0.0 o altri che no siano localhost
+rce: usa ${IFS} per lo spazio e inietta comandi
