@@ -1,0 +1,2 @@
+ln -s /percorso del link nel server nomefilesimlink
+zip --symlink nomefilesimlink
