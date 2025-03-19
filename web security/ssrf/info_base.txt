@@ -36,3 +36,26 @@ Il codice PHP sulla macchina vulnerabile usa file_get_contents per ottenere il c
 Se /get_flag.php è una risorsa valida (ad esempio, un file che contiene il flag), il server lo restituirà.
 Possibile Exploit: L'attaccante sta sfruttando questa vulnerabilità per accedere a file che normalmente non sarebbero accessibili dall'esterno
 (per esempio, i file di sistema, configurazioni, o file come /get_flag.php), ottenendo quindi il contenuto che potrebbe rivelare il flag.
+
+
+1. DNS Rebinding: Cos'è e Come Funziona
+Il DNS Rebinding è una tecnica che sfrutta il fatto che un dominio può risolvere a due IP diversi in momenti diversi:
+
+Prima risoluzione: Il dominio risolve a un IP pubblico (es: 203.0.113.1), bypassando i controlli di sicurezza.
+
+Seconda risoluzione: Dopo un breve periodo (quando il TTL del record DNS scade), il dominio risolve a un IP privato (es: 127.0.0.1), permettendo di fare richieste interne.
+
+2. Reindirizzamento con 307.r3dir.me
+Il servizio 307.r3dir.me è un servizio di reindirizzamento che:
+
+Prende un URL come parametro (url).
+
+Risponde con un codice di stato HTTP 307 (Temporary Redirect).
+
+Invia l'header Location con l'URL specificato nel parametro url.
+
+Esempio:
+
+Copy
+https://307.r3dir.me/--to/?url=http://miodominio.tk
+Il servizio reindirizza a http://miodominio.tk.

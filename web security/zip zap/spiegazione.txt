@@ -1,0 +1,5 @@
+i file zip possono contenere al loro interno dei file con simlink (link simbolico)
+se io creo un link simbolico nella mia macchina a flag.txt non mi porta a nulla perchè nn esiste 
+ma se zippo il file con il link e lo invio al server quando poi il server lo unzippa posso accedere a flag.txt presente nel server
+ln -s /percorso/del/tuo/file/flag.txt flag.txt
+zip nome_del_file.zip flag.txt

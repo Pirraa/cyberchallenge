@@ -1,0 +1,10 @@
+7z x archivio.zip -o/percorso/della/cartella
+tar -xzf file_compressed.tar.gz
+unzip archivio.zip -d /percorso/della/cartella
+xz -d -c nomefile.xz > nuovo_file
+cat hexdump.txt | xxd -r > output_file
+gunzip file_compressed.gz
+gzip -dc file_compressed.gz > output_file
+cat nomefile_base64 | base64 --decode > nomefile_output
+bzip2 -dc nomefile.bz2 > nuovofile
+

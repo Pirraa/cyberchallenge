@@ -1,0 +1,54 @@
+La URL che hai fornito, https://307.r3dir.me/--to/?url=http://localhost/get_flag.php, è un esempio di servizio di reindirizzamento. 
+Questo servizio prende un URL come parametro (url) e reindirizza l'utente o la richiesta a quell'URL. Ecco come funziona passo-passo:
+
+1. Struttura della URL
+La URL è composta da due parti principali:
+
+Servizio di reindirizzamento: https://307.r3dir.me/--to/
+
+Parametro url: ?url=http://localhost/get_flag.php
+
+2. Come Funziona il Reindirizzamento
+a) Richiesta Iniziale
+Quando visiti o fai una richiesta a https://307.r3dir.me/--to/?url=http://localhost/get_flag.php, il servizio 307.r3dir.me riceve la richiesta.
+
+Il servizio legge il parametro url (http://localhost/get_flag.php).
+
+b) Reindirizzamento
+Il servizio invia una risposta HTTP con un codice di stato 307 (Temporary Redirect).
+
+La risposta include un header Location con l'URL specificato nel parametro url:
+
+Copy
+Location: http://localhost/get_flag.php
+c) Richiesta Finale
+Il browser o il client HTTP segue automaticamente il reindirizzamento e fa una nuova richiesta a http://localhost/get_flag.php.
+
+
+
+
+
+
+
+
+1. DNS Rebinding: Cos'è e Come Funziona
+Il DNS Rebinding è una tecnica che sfrutta il fatto che un dominio può risolvere a due IP diversi in momenti diversi:
+
+Prima risoluzione: Il dominio risolve a un IP pubblico (es: 203.0.113.1), bypassando i controlli di sicurezza.
+
+Seconda risoluzione: Dopo un breve periodo (quando il TTL del record DNS scade), il dominio risolve a un IP privato (es: 127.0.0.1), permettendo di fare richieste interne.
+
+2. Reindirizzamento con 307.r3dir.me
+Il servizio 307.r3dir.me è un servizio di reindirizzamento che:
+
+Prende un URL come parametro (url).
+
+Risponde con un codice di stato HTTP 307 (Temporary Redirect).
+
+Invia l'header Location con l'URL specificato nel parametro url.
+
+Esempio:
+
+Copy
+https://307.r3dir.me/--to/?url=http://miodominio.tk
+Il servizio reindirizza a http://miodominio.tk.
