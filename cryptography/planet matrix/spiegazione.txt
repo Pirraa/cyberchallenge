@@ -1,0 +1,15 @@
+Per decifrare il messaggio CGKRKRLANXBERXBHLGAUVSZMQODKGB, 
+possiamo utilizzare il cifrario di Wheatstone, noto anche come cifrario di Playfair, 
+dato che il riferimento a Charles Wheatstone e la matrice di lettere fornita suggeriscono questo metodo.
+
+Passaggi per decifrare il messaggio:
+Costruire la matrice di Playfair:
+
+Nel cifrario di Playfair, il testo viene diviso in coppie di due lettere. 
+Se una coppia ha due lettere uguali, si inserisce una "X" tra di esse.
+
+Decifrare ogni coppia:
+Le regole del cifrario di Playfair per decifrare sono:
+Se le due lettere sono nella stessa riga, si sostituiscono con le lettere a sinistra (circolare).
+Se le due lettere sono nella stessa colonna, si sostituiscono con le lettere sopra (circolare).
+Se le due lettere formano un rettangolo, si sostituiscono con le lettere agli angoli opposti del rettangolo.

