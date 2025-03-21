@@ -1,0 +1,20 @@
+We are given three terms in the sequence:
+
+𝑠0=125778740
+𝑠1=513146825
+s2=1999511474
+
+Using the formula, we can set up equations to solve for m and c.
+s1=(m*s0+c) mod n
+s2=(m*s1+c) mod n
+
+con la formula inversa trovo c dalla prima
+c=(s1−m⋅s0)mod n
+
+poi lo sostituisco nella seconda
+s2=(m⋅s1+(s1−m⋅s0)mod n)mod n
+
+sostituendo incognita rimane solo m
+1999511474=(m⋅513146825+(513146825−m⋅125778740)mod2147483647)mod2147483647
+
+
