@@ -1,0 +1,32 @@
+import socket
+import time
+
+# Netcat server info
+host = "gtn3.challs.cyberchallenge.it"
+port = 9062
+
+# Your sequence of numbers
+sequence =[202280780, 1085250320, 1136907593, 1357329703, 1445415220, 1168244648, 764171197, 1696059405, 1801729327, 62011319, 1703566401, 1303288706, 425444808, 1846051107, 140939711, 864390143, 1972020359, 70618690, 822771937, 2145611893, 111314647, 1957963291, 959973401, 123624264, 383912002, 1082672821, 1746704056, 933263688, 1485294285, 1868372321, 1419832486, 624516980, 1394089172, 997688178, 1503245357, 1814999410, 1714177757, 1069760822, 944583183, 1064967192, 283526633, 63192538, 1682485393, 1841081846, 1873036478, 1369514679, 603675622, 263135918, 258943983, 2081678836, 1319556276, 447754900, 925474187, 519219415, 85001614, 1024398817, 1015555324, 893080760, 1031564952, 1001461739, 1282347212, 1545838864, 311825364, 1285912122, 1973124643, 1851702788, 1744557430, 1371702890, 1496878075, 1226389137, 2094019355, 1597197422, 1875870979, 236358602, 1020020253, 1618403941, 1079027533, 841383670, 1700125082, 683281106, 527816589, 210785012, 563056359, 1008315367, 1477724014, 1750921459, 1116390269, 474331345, 1416228524, 1613433813, 1784111149, 1332329220, 1842600539, 1635610971, 1194470755, 841929059, 1397893490, 1475863747]
+
+# Function to connect to the server and send the sequence
+def send_sequence(sequence):
+    # Create a socket
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        # Connect to the server
+        s.connect((host, port))
+        
+        # Send each number in the sequence one by one
+        for number in sequence:
+            # Convert the number to string and send it
+            msg = str(number) + "\n"  # Add newline to simulate pressing "Enter"
+            s.sendall(msg.encode())
+            
+            # Receive the response from the server
+            response = s.recv(1024).decode()
+            print(f"Sent: {number}, Response: {response}")
+            
+            # Wait a moment before sending the next number
+            time.sleep(1)
+
+if __name__ == "__main__":
+    send_sequence(sequence)

@@ -15,6 +15,7 @@ poi lo sostituisco nella seconda
 s2=(m⋅s1+(s1−m⋅s0)mod n)mod n
 
 sostituendo incognita rimane solo m
-1999511474=(m⋅513146825+(513146825−m⋅125778740)mod2147483647)mod2147483647
+1999511474=(m⋅513146825+(513146825−m⋅125778740)mod 2147483647)mod 2147483647
+
 
 
