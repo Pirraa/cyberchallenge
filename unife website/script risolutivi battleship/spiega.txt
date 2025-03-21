@@ -1,0 +1,99 @@
+Per giocare a questo gioco di Battleship con il server, il client effettua una serie di chiamate HTTP e WebSocket per interagire con il server. L'ordine delle chiamate dipende dalle fasi del gioco.
+
+Fasi del gioco e le chiamate corrispondenti:
+Login e invio delle informazioni di gioco (questo avviene tramite una richiesta HTTP):
+
+Il client invia il nome utente e la disposizione delle navi tramite il metodo POST alla route /login2 del server. Questo passaggio registra il nome utente e la disposizione della griglia delle navi nella sessione.
+Chiamata HTTP per login:
+
+http
+Copia
+POST http://ctf.unife.it:20001/login2
+Dati inviati nel corpo della richiesta:
+
+json
+Copia
+{
+  "username": "NomeUtente",
+  "code": "0111100110000000000011001110000000000000110000000000000000000111000000000000000000000000001000011100"
+}
+Dopo che il server ha ricevuto questi dati, la sessione viene creata e l'utente viene reindirizzato alla pagina battleship.
+Avvio del gioco:
+
+Dopo aver effettuato il login, il client viene reindirizzato alla pagina di gioco (/battleship). La connessione WebSocket viene stabilita con il server attraverso il metodo ws:// per interagire in tempo reale durante il gioco.
+Connessione WebSocket:
+
+javascript
+Copia
+ws = new WebSocket("ws://ctf.unife.it:20001");
+Questo è l'inizio della comunicazione in tempo reale tra client e server. Il WebSocket permette di ricevere i messaggi in tempo reale, come aggiornamenti sulla partita.
+Invio dei dati al server per iniziare il gioco:
+
+Quando il client si connette, invia il messaggio "join" al server per iniziare il gioco e partecipare con il nome utente e la disposizione delle navi. Questo è gestito dal server per inizializzare la partita.
+Messaggio WebSocket di "join":
+
+json
+Copia
+{
+  "type": "join",
+  "username": "NomeUtente",
+  "code": "0111100110000000000011001110000000000000110000000000000000000111000000000000000000000000001000011100"
+}
+Ricezione della griglia e dello stato della partita:
+
+Una volta che la partita è iniziata e il server ha registrato il giocatore, invia la griglia aggiornata e lo stato della partita tramite il messaggio "sync". Questo messaggio contiene informazioni sulla griglia dell'avversario, sulla salute (HP), sul turno corrente, e altre informazioni rilevanti.
+Messaggio di sincronizzazione ("sync") ricevuto dal client:
+
+json
+Copia
+{
+  "type": "sync",
+  "username": "NomeUtente",
+  "hp": 20,
+  "grid": [...],  // Griglia delle navi del giocatore
+  "turn": true,
+  "opp_username": "Billy",
+  "opp_hp": 20,
+  "opp_grid": [...]  // Griglia delle navi dell'avversario
+}
+La griglia e HP dell'avversario sono aggiornati in tempo reale. La logica per aggiornare la griglia sul client è gestita nel codice di refreshGrid().
+
+Interazione durante il gioco:
+
+Durante il gioco, il client e il server continuano a scambiarsi messaggi tramite WebSocket per determinare il turno di gioco e gestire gli attacchi tra i giocatori. Ogni volta che un giocatore fa un attacco, il server riceve il messaggio di tipo "attack" e aggiorna le griglie.
+Messaggio WebSocket per un attacco:
+
+json
+Copia
+{
+  "type": "attack",
+  "username": "NomeUtente",
+  "target": "Billy",
+  "box": ["1", "2"]
+}
+Il server risponde con aggiornamenti di stato sulla partita, come il risultato dell'attacco e lo stato della griglia.
+
+Chiusura del gioco:
+
+Se uno dei giocatori perde (quando l'HP di un giocatore raggiunge 0), il server invia un messaggio "kick" per informare il giocatore che ha perso e reindirizzarlo alla schermata principale.
+Messaggio di chiusura ("kick") quando si perde:
+
+json
+Copia
+{
+  "type": "kick",
+  "reason": "loser",
+  "details": "You lost!"
+}
+Ordine delle chiamate:
+Login (HTTP POST) - POST http://ctf.unife.it:20001/login2 con i dati di nome utente e codice.
+Connessione WebSocket - ws://ctf.unife.it:20001.
+Invio del messaggio "join" via WebSocket - Il client invia il messaggio di partecipazione al gioco.
+Ricezione della griglia e stato tramite "sync" - Il server invia la griglia, lo stato di HP, e altre informazioni.
+Interazione durante il gioco - Scambio di messaggi WebSocket per attacchi e aggiornamenti dello stato della partita.
+Chiusura del gioco - Se un giocatore perde, il server invia un messaggio di "kick" e termina la partita.
+Per ricevere la griglia del server:
+Effettua il login via HTTP POST alla route /login2.
+Stabilisci la connessione WebSocket a ws://ctf.unife.it:20001.
+Dopo aver inviato il messaggio "join", aspetta la risposta di tipo "sync" dal server, che conterrà la griglia di gioco aggiornata e lo stato della partita.
+Se segui questi passi nell'ordine, dovresti essere in grado di ricevere la risposta con la griglia e lo stato del gioco.

@@ -29,3 +29,4 @@ per codificare lo spazio
 PER CSRF
 rubare il cookie dell'admin con punti di injection, ad esempio mettere script in una query string 
 una volta rubato inviare richiesta con cookie rubato come cokie cojn get o post
+spesso nelle chellenge c'è il form di report dove devi reportare all'admin quello che tu non puoi fare ma lui si
