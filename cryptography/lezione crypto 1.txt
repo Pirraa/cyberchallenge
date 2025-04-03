@@ -1,0 +1,151 @@
+TIPI DI CIFRARI
+a blocchi: il testo è processato un blocco alla volta
+flow ciphers: il testo è processato considerandolo tutto
+
+OPERAZIONI DI CIFRATURA
+rimpiazzamento: ogni elemento del testo è sostituito con un altro
+trasposizione: scambio elementi del testo cifrato
+
+
+CRITTOGRAFIA SIMMETRICA
+sia mitetente che destintario conoscono la stessa chiave
+definita da messaggio M e 3 algoritmi: Gen, Enc,Dec
+Gen genera la chiave k
+Enc usa la chiave k per cifrare il messaggio M e restituisce un testo cifrato c
+Dec usa la chiave k e il testo cifrato c per creare output m che corrisponde al messaggio iniziale
+Deck(Enck(m))=m
+
+CIFRARO DI CESARE
+shifto lettera di k posti avanti, se arrivo alla fine dell'alfabeto ritorno alla a usando il modulo
+M=(m1...mt) sono tutte le letere dell'alfabeto (26 elementi) e Gen genera una k compresa fra 0 e 25
+Enck(m1....mt)=c1....ct dove ci=[mi+k mod 26]
+Deck(c1....ct)=m1....mt dove mi=[ci-k mod 26]
+vunlerabilità: ci sono solo 25 possibil shift da provare, è semplice capire se la chiave è corretta, le chiavi possibili sono 26! 
+ad ogni lettera del testo inoltre corrisponde la stessa lettera nel messaggio cifrato (monoalfabetico)
+Nelle lingue poi ci sono alcune lettere che compaiono più di altre, quindi posso sapere che lingua è in base alla frequenza delle lettere
+
+CIFRARIO DI VIGENERE
+se uso la chiave d shifto tutto di 4, se uso chiave b uso shift di 2 (26 possibili cifrari)
+prendo messaggio e parola chiave, la riproduco tante volte fino a rimpire il testo
+poi cifro ogni lettera del testo con la lettera corrispondente nella parola chiave
+tellhimaboutme
+cafecafecafeca
+veqpjiredozxoe
+lettere uguali possono andare sia nella stessa lettera sia in ettere diverse, a seconda della posizione della lettera che cifra nella parola chiave
+vulnerabilità: la chiave era corta, riutilizzata e non casuale (ad esmepio cafe). Se la faccio lunga casuale e non riutilizzabile è difficile da violare
+variante: la chiave viene shiftata ogni volta che viene ripetuta
+
+PRINCIPIO DI KERCHOFF
+se l'attaccante conosce cifrario e schema di cifratura la chiave deve rimanere segreta
+più facile cambiare chiave e tenerla segreta rispetto all'algoritmo
+l'attaccante può conoscere:
+	solo i testi cifrati, 
+	i testi cifrati e i testi in chiaro
+	i testi in chiaro da lui scelti e i testi cifrati
+	i testi cifrati da lui scelti e i rispettivi testi in chiaro
+	i testi in chiaro e cifrati entrambi da lui scelti
+quindi può:
+	provare l ìe chiavi sui testi cifrati finchè non ottiene una traduzione legittima, deve sapere come è il testo atteso
+
+SICUREZZA:
+se il testo cifrato non contiene sufficienti infrormazioni per determinare il corrispondente testo in chiaro abbiamo UNCODNDITIONAL SECURITY
+se il tempo per decifrare è superiore a una soglia abbiamo COMPUTATIONAL SECURITY (va ricalcolata, esempio il des è stato craccato a forza bruta)
+con i computer quantistici si possono creare algoritmi appositi per ridurre il tempo per rompere algoritmi crittografici
+
+
+PRINCIPIO DI SHANNON
+confusione: relazione fra testo cifrato e chiave il più complessa possibile
+	chiave distribuita su tutto il testo cifrato
+	ogni bit del testo eve dipendere da ogni bit della chiave
+
+diffusione: 
+mischia trasposizione e sostituzione, se cambio un bit il cambiamento si deve trasportare su tutto il testo cifrato
+
+
+ONE TIME PAD E XOR
+XOR: ogni carattere di un messaggio m è ccriptato con la xor e una chiave fissa k
+m=m1,m2,m3 k=k1,k2,k3 c=(m1 xor k1), (m2 xor k2), (m3 xor k3)
+è vulnerabile a attacchi in cui conosco il testo in chiaro, perchè da una coppia m,c posso risalire a k
+OTP: ogni messaggio in chiaro si deve potre ottenere da un messaggio cifrato con una chiave con la stessa probabilità (chiave e testi devono avere la stessa dimensione)
+è come un cifrario xor in cui chiave e messaggio hanno la stessa lunghezza
+
+
+ATTACCO MTP
+se la chiave k è stata usata pià volte
+c1=m1 xor k 
+c2=m2 xor k
+c1 xor c2 = m1 xor m2
+
+
+CIFRARI A BLOCCHI
+divide testoo in chiaro in blocchi e li trasforma in altri blocchi (simile a permutazione)
+nella pratica: si genera chiave e poi la si espande con una funzione, poi si applica al testo una parte della chiave tramite una funzione fino a usarla tutta
+è sicuro se le funzioni non lineari ad esempio 
+F(m1,k1)=k1*m1+b=m2
+F(m2,k2)=k2*(k1*m1)=(k2*k1)*m1=F(m1,k2*k1)
+
+DES
+cifrario a blocchi di 64 bit e chiavi a 56 bit
+la chiave è espansa in 16 chiavi da 48 bit
+è applicata una permutazione di 64 bit all'input, 
+ci sono 16 cicli di una funzione in cui l'input è diviso in due parti, il primo subisce una funzione il secondo no e poi li sommo fra loro
+la funzione: prende 32 bit (metà blocco) lo espande e diventano 48 bit, prende la chiave e la somma bit a bit con l'input. 
+Poi divide i 48 bit in 8 blocchi da 6 bit e li manda in una scatola di sostituzione che li trasforma in 4 bit, unendo i 4 bit dei blocchi riottego 32 bit
+debolezza: la lunghezza della chiave, e chiavi deboli cioèè chiavi che se cifrano un messaggio due volte riottengo quello di partenza (cioè decifrano usando l'algoritmo di cifraura)
+
+
+3DES
+usa 3 chiavi des, quindi 168 bit di chiave
+cifra prima con la chiave 3, poi decifra con la chiave 2 e poi cifra nuovamente con la chiave 1
+debolezza: alcune triple di chiave danno lo stesso effetto di usare una sola chiave (come il des)
+non uso 2des con 2 chiavi perchè è vulnerabile a MEET IN THE MIDDLE
+prendo tutti i possibili testi cifrati e testi in chiaro e vedo se ci sono cirrispondenze
+
+
+AES
+testo a 16 byte, 128 bit, diviso in una matrice 4x4 
+uso blocco di 3 operazioni ripetuto 10 volte
+le 3 operazioni sono: 
+sub bytes fa la sbox cioè applica una funzione del tipo (1/m) + c  su tutto il blocco (numero di campo finito)
+shift row, shifta seconda riga di due posti, terza riga di 3 posti e quarta riga di   4 posti
+mix columns ogni colonna subisce operazione 
+add rund key fa la xor bit a bit del essaggio e della chiave
+
+
+CIFRATURA DI FILE
+divido il file in blocchi e opero su questi blocchi
+
+ECB electronic code book 
+prendo blocco lo cifro e passo a blocco sucessivo (poco sicuro, stesso blocco in posizioni diverse cifrato allo stesso modo)
+se lo applico  immagine jpeg ogni colore è cifrato allo stesso modo
+
+
+ORACOLO
+server che se invio un testo mi restituisce testo cifrato usando sempre la stessa chiave
+esempio C=ECB(key,P||S)
+P è il plaintext, S è una stringa segreta, || è la concatenazione
+
+COME DECIFRARE:
+invio messaggio di 1 byte più piccolo della dimensione del blocco
+provo tutti i messaggi in cui cambio solo l'ultimo byte finchè non trovo lo stesso testo cifrato
+quando trovo corrispondenza ho un byte associato a una parte del messaggio, e vado a ritroso finchè non ho sempre più byte
+
+COMPLETARE MESSAGGIO
+padding: se testo cifrato non è multiplo del blocco aggiungo byte alla fine
+aggiungo un byte e questo corrisponde al numero di byte mancanti (se ne manca uno aggiung 0x01, se sono due 0x02)
+
+
+CBC
+divide messaggio da cifrare in blocchi e crea un vettore iniziale IV
+aggiungo al primo blocco il vettore e cifro con la chiave, poi sommo questo con il secondo blocco e cifro con la chiave e così via
+se viene usato lo stesso vettore di inzializzazione per ogni testo da cifrare invio due byte bb uguali e scopro il vettore iv
+P1=D(k,B) + IV 
+p2=D(k,B)+B
+p1+p2+b=iv=k
+
+
+
+
+
+
+

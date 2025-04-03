@@ -1,0 +1,191 @@
+ALGORITMO EUCLIDEO
+calcola mcd fra due numeri, lo esprime come combinazione di due numeri dati
+siano r0,r1,q2,r2 interi tali che r0=q2*r1+r2 allora mcd(r0,r1)=mcd(r1,r2)
+costruisco ora successione di resti r0,r1,r2,r3...,ri tale che r1>r2>r3>...ri
+mcd(r0,r1)=mcd(r1,r2).....=mcd(rn+1,rn+2)=mcd(rn+1,0) perchè c'è un n tale che rn+1>rn+2=0
+l'mcd fra un numero e 0 è il numero stesso quindi mcd(r0,r1)=mcd(rn+1,0)=rn+1
+
+applico a 9878 e 7399
+9878=1*7399+2479 faccio il più grande(dividendo) diviso il più piccolo(divisore) e trovo quoziente(1) e resto(2479)
+7399=2*2479+2441 prendo il divisore di prima e lo divido per il resto (7399/2479) e trovo quoziente (2) e resto (2441)
+2479=1*2441+38   prendo divisore di prima (2479) e lo divido per il resto (2479/2441) e trovo quoziente (1) e resto (38)
+2441=64*38+9     2441/38 il resto è 9
+38=4*9+2         38/9 il resto è 4
+9=4*2+1          9/2 il resto è 1
+2=2*1+0          2/1 il resto è 0 -> il resto precedente diverso da 0 cioè 1 è il nostro mcd
+
+IDENTITA DI BEZOUT
+dati due interi a,b esistono due interi c,d tali che mcd(a,b)=c*a+d*b
+ALGORITMO EUCLIDEO ESTESO
+ogni resto si scrve come combinazione lineare dei due numeri di partenza
+ri= xi * a + yi * b, per i=n+1 mcd(a,b) = xn+1 * a + yn+1 * b
+esempio sulle slide che calcola mcd di prima usando le variabili xi yi e non usa le divisioni
+
+TEOREMA CINESE DEL RESTO
+dati m e n, se scelgo a e b qualsiasi 
+posso risolvere il sistema con x è congruo ad a modulo m e x è congruo a b modulo n
+solo se mcd(m,n)=1
+soluzione sistema x=a-k*lambda*m (k=a-b e lambda=coefficiente di m nella identità di bezout sopra, quindi la c)
+
+ALGORITMO SQUARE E MULTIPLY
+come calcolare a elevato alla n modulo m
+trasformo n in base 2,creando stringa di cifre binarie ni,ni-1,...n2,n1,n0 
+raccolgo i due e poi uso proprietà delle potenze
+per fare a alla n prendo a, faccio a^ni, ni può essere 0 o 1, poi elevo al quadrato, 
+poi moltiplico per a^ni-1, e elevo al quadrato, e così via fino ad arrivare alle ultime 3 cifre 
+a^n2 ) ^2 * a^n1) ^2 * a^n0
+il costo è polinomiale del numero di cifre di n e non esponenziale
+
+PASSI
+converto esponente in binario, metto una q in mezzo fra le cifre binarie
+tolgo gli 0 e tengo solo gli 1 della tringa binaria
+se incontro un 1 moltiplico per a (base), se incontro una q elevo al quadrato
+12^100 -> 100=1100100 -> 1q1q0q0q1q0q0 -> 1q1qqq1qq 1 moltiplica per a, 1 fa il quadrato
+quando moltiplico per a o faccio il quadrato faccio sempre modulo con m
+
+
+SCAMBIO CHIAVI
+n utenti comunicano in modo indipendente ma il canale è condiviso
+quindi se a e b comunicano sul canale c non deve essere in grado di decifrare il messaggio anche se lo cattura
+soluzione banale: ogni utente usa una chiave per comunicare con ognuno degli altri utenti (n-1 chiavi)
+altervativa: ttp -> trusted third party, autorità centrale che crea le chiavi e le condivide con i vari utenti
+esempio: alice comunica con bob e la ttp conosce le chiavi di alice ka e di bob kb
+	la ttp crea una chiave kab per la comunicazione simmetrica fra alice e bob
+	invia ad alice la kab criptando con ka E(ka,kab)
+	invia ad alice kab criptandola con kb E(kb,kab)
+	alice invia la seconda a bob, e comunicano usando kab
+	problema: la autorità centrale può intercettare le comunicazioni perchè conosce le chiavi e deve essere sempre online 
+
+CHIAVI SENZA TTP
+MERKLE PUZZLES
+a genera elenco enorme di chiavi, ognuno è un problemino da risolvere, che se decifrato si trasforma in messaggio 
+il messaggio è del tipo: questa è la chiave nrn348208238fjekf
+bob sceglie a caso un messaggio lo decifra e estrae la chiave
+bob dice ad alice la chiave che ha scelto
+alice guarda nel database delle chiavi la chiave corrispondente e viene usata per comunicare
+problema: l'elenco di chiavi deve essere molto grande
+
+DIFFIE HELMANN
+alice e bob decidono un numero primo grande p e un generatore g compreso fra 2 e p-1
+il generatore g è un numero tale che se prendo un elemento dell'insieme {0,1,2,....n} e faccio g^k mod cardinalità_insieme ottengo tutti gli elementi dell'insieme
+(ogni numero si scrive come potenza di g) b=g^a oppure a=logaritmo discreto in base g di b
+alice sceglie un numero a che sarà la sua chiave privata, stessa cosa fa bob scegliendo b
+alice invia a bob A=g^a mod p e bob invia ad alice B=g^b mod p
+bob conosce b e A, alice conosce a e B
+entrambi calcolano g^(ab) mod p, che bob calcola come A^b mod p, e alice lo calcola come B^a mod p
+usano questo numero come chiave per un cifrario a chiave privata
+problema: vulnerabile a man in the middle 
+	se un estraneo ascolta la comunicazione fra alice e bob
+	intercetta il messaggio di alice A=g^a, se lo tiene da parte e lo modifica prima di inviarlo a bob, quindi invia ad esempio A'=g^a'
+	fa la stessa cosa anche intercettando il messaggio di bob ad alice
+	quindi alice e bob non comunicano fra loro ma comunicano con l'estraneo
+ 
+
+CRITTOGRAFIA PUBBLICA
+A genera le sue due chiavi Aprivata e Apubblica
+B prende il testo da cifrare, lo cifra con la chiave pubblica di A e li invia ad A c=E(p,Apubblica)
+A lo decifra con la sua chiave privata p=D(c,Aprivata)
+richiesta: le chiavi devono essere collegate fra loro D(E(Aprivata)Apubblica)=P
+richiesta: facile ottenere la pubblica dalla privata, ma conoscendo la pubblica deve essere impossibile trovare la privata
+risolve il problema della firma digitale: faccio l'inverso di prima
+	A vuole firmare il messaggio da inviare a b
+	A firma il messaggio con la sua chiave privata E(m,Aprivata)
+	A distribuisce messaggio e la firma effettuata
+	chiunque con la chiave pubblica di A può decifrare la firma D(firma,Apubblica)
+	in questo modo certifico che a ha prodotto il messaggio, so che non è stato manomesso e A non può ripudiarlo
+
+RSA
+due chiavi pubblica distribuita a tutti e privata tenuta segreta
+scelgo due numeri primi p e q distinti
+calcolo n=p*q
+calcolo phi(n)=(p-1)*(q-1)
+scelgo e, compreso fra 1 e phi(n), deve essere comprimo con phi(n) -> mcd(e,phi(n))=1
+determino la chiave privata d -> e*d mod phi(n) = 1
+	devo trovare d = e^-1 mod phi(n)
+	identità di bezout tra e e phi(n) -> mcd(e,phi(n))) = 1 = d * e + h * phi(n)
+la chiave privata è composta da d ed n
+la chiave pubblica è composta da e ed n
+
+CIFRARE
+C=M^e mod n
+DECIFRARE 
+M=C^d mod n
+al posto di fare il modulo con n posso fare il modulo con p e q 
+
+PARAMETRI
+numeri primi grandi e di almeno 1024 bit
+numeri primi lontani fra loro
+numeri primi da non riutilizzare per due chiavi diverse
+se scelgo potenza di 2 come esponente pubblico come 65537 è più facile fare la potenza
+
+
+VULNERABILITA RSA
+FACTORING
+conosco n, devo trovare p e q 
+il più efficiente algoritmo di fattorizzazione è GNFS
+cosa usare nelle ctf:
+	factordb.com -> database di numeri primi
+	funzione factor in sagemath
+	software yafu
+
+FATTORIZZAZIONE DI FERMAT
+funziona solo se p=a+b e q=a-b 
+p e q sono dispari, (p+q)/2 è intero ma anche (p-q)/2 è intero
+N = a^2 - b^2, equivalente a a^2 - N = b^2
+se b è piccolo, p e q sono vicini fra loro, inoltre b è più piccolo della radice di N, a è più grande della radice di N
+ad esempio N=13837, ne faccio la radice e ottengo 117,6..
+calcolo		 a 	a^2 	a^2 - N
+inizio da a=118 (più grande della radice di N), finchè non ottengo un quadrato su a^2-N
+a=119, a^2=14161, a^2-N=324, 324=18^2. A questo punto so che a=119, b=18, p=a+b=137, q=a-b=101, n=p*q=137*101
+
+
+COMMON PRIME
+dati N1=p*q e N2=p*r cioè due n che condividono un numero primo
+trovo p=gcd(N1,N2) cioè p è il massimo comune divisore fra N1 e N2, trovato con algoritmo euclideo
+
+
+COMMON MODULE
+date due chiavi con N uguale ma esponeti divesi (N,e1) (N,e2)
+cifrature del messaggio M quindi sono 
+	c1 = M^e1 mod N 
+	c2 = M^e1 mod N 
+sfruttando identità di bezout: u*e1=v*e2=1
+faccio il prodotto c1^u * c2^v mod N e sostituendo c1 e c2 con le formule di prima e applicando proprietà potenze ottengo M
+
+
+ORACOLO
+cipta con chiave segreta, posso risalire al modulo? 
+cripto due messaggi x e y trovando enc8x) e enc(y)
+considero come esponente 65537 e esegui x^e e y^e
+calcolo gcd (x^e - enc(x), y^e - enc(y) )
+
+ORACOLO 2
+non decifra una stringa standardizzata ad esempio codice fiscale, ma decifra tutto il resto
+prendo messaggio x qualsiasi
+lo cifro localmente ottenendo x^e
+mando all'oracolo x^e *c e chiedo di decifrare
+decifrare questo significa D(x^e*c)=D(x^e)*D(c)=x*D(c)
+
+ORACOLO LSB
+se invio un numero m mi dà il bit meno significativo della rappresentazione binaria di m
+so che il numero è compreso fra 0 ed N
+divido a metà questo intervallo e definisco un numero m e so che 
+	se l'oracolo restituisce 0 il numero è compreso fra 0 e parte intera di N/2-1
+	se l'oracolo resituisce 1 il numero è compreso fra parte intera di N/2+1 e N
+continuando a dimezzare avrò un intervallo sempre più piccolo finchè non ottengo il numero che sto cercando
+il numero da inviare lo calcolo così: 2^e * c, 4^e * c, 8^e * c
+
+
+ 
+ 
+
+	
+
+
+
+
+
+
+
+
+
