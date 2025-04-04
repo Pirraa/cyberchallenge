@@ -29,7 +29,7 @@ while True:
     #words=line.split()
     for key in range (26):
         decrypted=decrypt(line, key)
-        #print(decrypted)
+        print(decrypted)
         if 'unife' in decrypted or 'flags' in decrypted:
             print(decrypted)
             conn.sendline(str(decrypted).encode())

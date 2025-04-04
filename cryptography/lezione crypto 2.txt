@@ -155,7 +155,7 @@ faccio il prodotto c1^u * c2^v mod N e sostituendo c1 e c2 con le formule di pri
 
 ORACOLO
 cipta con chiave segreta, posso risalire al modulo? 
-cripto due messaggi x e y trovando enc8x) e enc(y)
+cripto due messaggi x e y trovando enc(x) e enc(y)
 considero come esponente 65537 e esegui x^e e y^e
 calcolo gcd (x^e - enc(x), y^e - enc(y) )
 
