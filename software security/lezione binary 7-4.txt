@@ -1,0 +1,133 @@
+PREPROCESSING
+direttive del preprocessore, ad esempio #define di costanti
+se compilo con gcc -E hello.c vedo il codice con le direttive sostutuite
+
+COMPILAZIONE
+con gcc -s hello.c vedo le istruzioni assembler
+
+ASSEMBLAGGIO
+gcc -c hello.c 
+gcc -o hello hello.c -> objdump -d hello
+
+LINK 
+statico o dinamico è la fase di combinazione del codice con librerie esterne 
+statici non dipendono da librerie esterne
+
+
+STRUTTURA FILE ELF
+header: descrive contenuti file
+program header table: informazioni su come creare immagine del processo
+sezioni: cosa è necessario per il linking
+section header table: descrizione delle sezioni precedenti
+
+ARCHITETTURA X86 32 BIT
+archettuta di processore con 8 registri da 32 bit
+eax, ebx, ecx,edx,esi,edi,esp,ebp eax è il registro accumulatore (op aritmetiche) ecx è il counter (conto indice del ciclo)
+ci sono dei sottoregistri, eax è suddiviso in
+ax cioè i 16 bit meno significativi
+l'altra metà cioè i bit più significativi è divisa in ah e al 
+
+ARCHITETTURA X86 64 BIT
+il registro eax si chiama rax
+ci sono registri z a 512 bit, che contengono registri y a 128 bit e contengono a loro volta registri x a 64 bit
+
+ISTRUZIONI BASE
+mov op1,op2 -> copia il contenuto del registro  op1 in op2
+push op1 -> mette op1 sul top dello stack
+pop -> rimuove l'ultimo elemento dallo stack
+lea op1,op2 -> carica l'indirizzo di op2 nel registro op1
+add op1,op2 -> mette in op1 il risultato di op2+op1
+add op1,op2 -> mette in op1 il risultato di op2-op1
+stessa cosa per and,or,xor
+jmp op -> salta al gruppo di istruzioni specificato da op
+cmp op1,op2 -> compara i valori di due registri e memorizza il risultato in machine status word
+j <condition> op -> sulla base dello stato di machine status word salta all'indirizzo di op
+esempi di condizione: jz(se zero) jc(se carry) jo(se overflow) 
+
+GESTIONE MEMORIA
+in c è controllata dal programmatore, allocata dinamicamente e lavoro con puntatori e indirizzi
+memoria è sequenza di byte, se strutturata a multipli di 8 l'intero di 4 byte è messo su 4 byte consecutivi 
+posso compilare con flag gcc main.c -O2 e il compilatore ottimizza l'allocazione in memoria delle variabili
+	aggiunge padding e cambia ordine dati in memoria
+
+SEGMENTI DI MEMORIA
+un processo allocato in memoria ha un suo spazio di indirizzamento diviso in varie parti:
+stack cresce da indirizzi alti verso indirizzi bassi, variabili locali
+heap cresce da indirizzi bassi verso indirizzi alti, variabili dinamiche
+data segment contiene variabili non inizializzate (bss) e inizializzate (data)
+code segment o text con codice
+
+STACK
+composto da sequenza di stack frame, ognuno con info per chiamata a una funzione, struttura di tipo lifo
+quando faccio chiamata aggiungo allo stack, quando faccio return lo tolgo dallo stack frame
+lo stack pointer punta all'ultimo elemento nello stack, (ultima variabile locale) cioè il più basso, ed è contenuto nel registro rsp (extended stack pointer)
+
+DENTRO LO STACK FRAME
+contiene argomenti della funzione, variabili locali, due registri return address e frame pointer
+frame pointer puntatore al frame precedente (ebb extended base pointer) 
+il registro che contiene ebb punta all'inizio della sezione delle variabili locali
+in mezzo fra esp e ebb ci sono quindi le variabili locali
+return address dove restituire controllo quando funzione termina
+
+HEAP
+alloca variabili dinamiche, ad esempio attributi di una classe alla dichiarazione
+variabili nell'heap non dipendono da una funzione, esistono anche dopo che termina
+in c uso malloc e free per allocare memoria nell'heap
+
+DEBUGGING
+per studiare file eseguibile e le sue vulnerabilità
+eseguo programma sotto condizioni, traccio chiamate, ispeziono memoria
+opzione gcc -g per inserire simboli di debugging nell'eseguibile, quando distribuisco il programma però meglio ometterlo
+readelf -- debug-dump eseguibile mi dice se ci sono simboli di debugging nel file
+quale architettura? ci sono simboli e stringhe? c'è processo associato a questo file? leggo lo sha e vedo se è associato a malware, vedo funzioni e librerie usate
+
+LEGGERE FILE ELF
+strings raccoglie le stringhe nel file binario, sequenze di almeno 4 caratteri che siano stampabili (ascii utf-8) chiuse da carattere non stampabile come terminatore di stringa
+ad esempio posso vedere path di un so 8libreria dinamicamente linkata) 
+flag -d -h -n
+
+OBJDUMP
+info su uno o più file oggetto
+formato (elf64) architettura (x86) indirizzo di start
+objdump -h vedo gli header di sezione 
+objdump -s -j .rodata eseguibile -> vedo la sezione di sola lettura dell'eseguibile
+objdump -D eseguibile | grep "main" -> vedo istruzioni assembler per chiamare il main (disassemblaggio)
+
+READELF
+vedo l'header dell'elf (flag -s e -l)
+
+GDB
+debugger, faccio partire il programma e lo posso fermare secondo certe condizioni, o con un breakpoint 
+posso modificare la memoria o i registri
+comando gdb nomeprogramma
+comando r o run lancia semplicemente il programma
+show args -> mostra argomenti passati al programma
+set args 10 test eseguibile -> aggiunge argomenti
+show/set paths, show/set environment -> mostro e setto variabili d'ambiente
+per fermare programma: breakpoint, segnale, step (alla fine si ferma e vedo o stato)
+watchpoint e catchpoint -> blocca il programma secondo certe condizioni, come cambio di valore di un'espressione o un evento tipo segnale
+comando break location (nome funzione o indirizzo di memoria o numero riga di codice)
+break location if condizione
+dopo il breakpoint posso fare continue per andare fino alla fine del programma o step per fare solo la prossima istruzione
+per ispezionare lo stack frame: info frame oppure frame <selection> 
+(posso vedere eip o rip cioè indirizz di ritorno)
+disas comando per disassemblare un file 
+il comando p di gdb analizza la memoria (print) o con comando inspect 	print variabile
+gef è un debugger più avanzato, con il comando registers vedo direttamente il contenuto dei registri trasformato in stringa
+con il comando call funzione posso chiamare funzioni che il programma non esegue
+
+PWNTOOLS
+libreria python per exploit veloci
+con i tubes posso collegarmi a procesi locali o a connessioni tcp o udp
+possiamo fare con i tube send e receive di dati
+remote e listen per collegarsi a servizio remoto o per mettersi in ascolto
+
+
+
+
+
+
+
+
+
+

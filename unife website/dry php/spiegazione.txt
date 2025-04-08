@@ -1,0 +1,30 @@
+3. Potential Vulnerability
+The interesting part is in the PATCH handler:
+
+php
+Copy
+else if($_SERVER['REQUEST_METHOD'] === 'PATCH') {
+    $message = htmlspecialchars($data['message']);
+    echo $$message;
+}
+This implements variable variables, which could allow accessing other variables in the scope if proper input validation isn't done.
+
+4. Flag Extraction Possibility
+Given the structure, you might be able to:
+
+Use a PATCH request with message=s3cr3t_c0nt3nt
+
+This would make the code evaluate $$message as $s3cr3t_c0nt3nt
+
+Which would then echo the flag value
+
+How to Exploit:
+bash
+Copy
+curl -X PATCH http://target.com/index.php -d "message=s3cr3t_c0nt3nt"
+Security Notes:
+The htmlspecialchars() prevents XSS but doesn't mitigate the variable variable issue
+
+The flag is never actually executed due to the if(false) condition
+
+This appears to be a deliberately vulnerable CTF challenge

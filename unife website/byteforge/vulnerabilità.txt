@@ -1,0 +1,42 @@
+1. Vulnerabilità: String Format Injection
+Il problema risiede in questa riga:
+
+return f"{person}".format(person=person)
+La classe Person implementa __repr__(), che restituisce una stringa non controllata (name).
+
+Se un utente inserisce un formato Python (es. {variabile}) nel campo name, può accedere ad attributi arbitrari.
+
+2. Come sfruttarlo per leggere FLAG
+Poiché FLAG è una variabile globale, possiamo accedervi con:
+
+
+{person.__init__.__globals__[FLAG]}
+Ma poiché FLAG è il nome della variabile, dobbiamo usare:
+
+
+{person.__init__.__globals__["FLAG"]}
+Payload di Esempio
+Invia questo nel form:
+
+
+{person.__init__.__globals__[FLAG]}
+Oppure (se FLAG è hardcoded come stringa):
+
+
+{person.__init__.__globals__["FLAG"]}
+Alternativa (se il payload sopra non funziona)
+Se il filtro blocca le virgolette, prova:
+
+
+{person.__class__.__init__.__globals__["FLAG"]}
+3. Perché Funziona?
+person.__init__.__globals__ restituisce il dizionario delle variabili globali del modulo.
+
+["FLAG"] accede alla variabile d'ambiente FLAG.
+
+4. Come Difendersi
+Non usare .format() con input utente (usare f-strings con escape o html.escape()).
+
+Validare l'input (es. bloccare { e }).
+
+Usare __str__ invece di __repr__ se non necessario.

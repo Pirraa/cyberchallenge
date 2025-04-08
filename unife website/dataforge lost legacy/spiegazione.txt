@@ -1,0 +1,14 @@
+Step 2: Estrarre la Flag
+Se l'attacco UNION funziona, il server potrebbe:
+
+Mostrare la flag nel titolo/sottotitolo/contenuto del post (se il rendering è vulnerabile).
+
+Restituire un errore che include la flag (se il sistema non gestisce bene i dati iniettati).
+
+Payload Ottimizzato
+sql
+Copy
+/post/999' UNION SELECT 1, flag, flag, flag FROM secret WHERE '1'='1
+999 è un ID inesistente, così la prima parte della query (SELECT * FROM posts WHERE id=999) restituisce 0 righe.
+
+L'UNION aggiunge la riga con la flag, che potrebbe essere visualizzata.

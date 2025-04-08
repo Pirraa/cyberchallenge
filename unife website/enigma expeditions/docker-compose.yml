@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+    web05:
+        build: .
+        ports:
+            - '0.0.0.0:34004:5000'
+        privileged: false
+        restart: unless-stopped

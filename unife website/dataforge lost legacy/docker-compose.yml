@@ -1,0 +1,22 @@
+services:
+    payroll2:
+        build: .
+        ports:
+            - '34000:3000'
+        privileged: false
+        restart: unless-stopped
+        environment:
+            DB_HOST: payroll2-db
+            DB_USER: user
+            DB_PASS: password
+            DB_DB: db
+
+    payroll2-db:
+        image: mariadb
+        environment:
+            MARIADB_USER: user
+            MARIADB_PASSWORD: password
+            MARIADB_DATABASE: db
+            MARIADB_RANDOM_ROOT_PASSWORD: 'yes'
+        volumes:
+            - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro

