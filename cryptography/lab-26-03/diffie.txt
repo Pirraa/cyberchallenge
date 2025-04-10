@@ -1,0 +1,4 @@
+p = 467
+g = 2
+public_A = 228
+public_B = 86
