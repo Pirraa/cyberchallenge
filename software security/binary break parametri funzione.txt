@@ -1,0 +1,201 @@
+c'è il modo di cambiare il parametro di ingresso a una funzione incon gdb richiamata
+Sì, puoi modificare i parametri di ingresso di una funzione in GDB mentre il programma è in esecuzione. Ecco come fare:
+
+Modificare i Parametri di una Funzione con GDB
+1. Imposta un Breakpoint Prima della Chiamata
+Metti un breakpoint prima che la funzione venga chiamata:
+
+bash
+Copy
+break *indirizzo_chiamata  # Esempio: break *0x0804847a
+2. Esegui il Programma
+bash
+Copy
+run
+3. Quando il Breakpoint Scatta
+Visualizza i Parametri Correnti:
+
+bash
+Copy
+info args  # Mostra i parametri della funzione corrente
+print $eax  # Se i parametri sono passati via registri (x86_64: RDI, RSI, RDX, RCX, R8, R9)
+Modifica i Parametri:
+
+Se passati sullo stack (x86 32-bit):
+
+bash
+Copy
+set *(int*)($esp + offset) = nuovo_valore
+Se passati via registri (x86_64):
+
+bash
+Copy
+set $rdi = nuovo_valore_param1  # Primo parametro
+set $rsi = nuovo_valore_param2  # Secondo parametro
+4. Esempio Pratico
+Supponiamo questa chiamata:
+
+c
+Copy
+func(42, "test");
+In GDB:
+
+bash
+Copy
+break *0x0804847a  # Indirizzo della chiamata a func
+run
+# Quando si ferma:
+set $rdi = 100      # Cambia il primo parametro da 42 a 100
+set $rsi = 0x804a010  # Cambia il secondo parametro con un altro indirizzo
+continue
+Se la Funzione è Già in Esecuzione
+Se vuoi modificare i parametri dopo che la funzione è stata chiamata:
+
+Vai allo Stack Frame della Funzione:
+
+bash
+Copy
+frame 1  # Seleziona il frame della funzione chiamante
+Modifica i Parametri sullo Stack:
+
+bash
+Copy
+set *(int*)($ebp + 8) = nuovo_valore  # Primo parametro (x86 32-bit)
+Esempio con una Funzione Specifica
+Se hai una funzione come:
+
+c
+Copy
+void verify(int key, char* input) {
+    // ...
+}
+E vuoi cambiare key e input durante l'esecuzione:
+
+bash
+Copy
+break verify
+run
+# Quando si ferma:
+set $rdi = 1234  # Nuova key
+set $rsi = 0x804a020  # Nuovo input (deve essere un indirizzo valido)
+continue
+Attenzione
+Validità degli Indirizzi: Se modifichi puntatori, assicurati che puntino a dati validi.
+
+Registri/Stack: La convenzione di chiamata dipende dall'architettura (x86 vs x86_64).
+
+Ottimizzazioni: Se il codice è ottimizzato, i parametri potrebbero essere in registri non standard.
+
+Se hai un caso specifico, posso aiutarti con comandi mirati! 😊
+
+come vedo le funzioni per impostare il break iniziale che mi hai mandato
+Per vedere tutte le funzioni disponibili in un programma e impostare un breakpoint iniziale (ad esempio su main o un'altra funzione), segui questi passaggi in GDB:
+
+1. Mostrare tutte le funzioni nel programma
+Usa il comando:
+
+bash
+Copy
+info functions
+Questo elenca tutte le funzioni presenti nel binario, anche quelle senza simboli di debug.
+Esempio di output:
+
+Copy
+0x00001189  sub_1189
+0x00001234  main
+0x00001350  __libc_start_main
+...
+2. Cercare funzioni specifiche
+Se vuoi cercare una funzione per nome (utile se il binario ha simboli):
+
+bash
+Copy
+info functions nome_funzione  # Esempio: info functions main
+3. Impostare un breakpoint iniziale
+Opzione A: Se conosci il nome della funzione (es. main)
+bash
+Copy
+break main
+Opzione B: Se non hai simboli (usa l'indirizzo esatto)
+bash
+Copy
+break *0x00001234  # Sostituisci con l'indirizzo di main/sub_1189 dall'output di info functions
+Opzione C: Breakpoint all'entry point del programma
+Se non trovi main, fermati all'entry point (punto di ingresso del binario):
+
+bash
+Copy
+break _start
+4. Verificare i breakpoint impostati
+bash
+Copy
+info breakpoints
+Esempio di output:
+
+Copy
+Num  Address            What
+1    0x00001234         main
+5. Avviare il programma
+bash
+Copy
+run
+Il programma si fermerà all'inizio della funzione specificata.
+
+Esempio Pratico
+Step-by-Step
+Apri GDB:
+
+bash
+Copy
+gdb ./tuo_programma
+Mostra le funzioni:
+
+bash
+Copy
+info functions
+Output:
+
+Copy
+0x00001189  sub_1189
+0x00001234  main
+Imposta breakpoint su main:
+
+bash
+Copy
+break main
+Avvia il programma:
+
+bash
+Copy
+run
+Il programma si fermerà all'inizio di main.
+
+Se il binario è stripped (senza simboli)
+Trova l'indirizzo di main con:
+
+bash
+Copy
+info functions
+Cerca indirizhi sospetti (es. vicino a __libc_start_main).
+
+Imposta il breakpoint all'indirizzo trovato:
+
+bash
+Copy
+break *0x00001234
+Note Importanti
+Binari ottimizzati: Se il codice è compilato con -O2/-O3, main potrebbe essere inlined. Usa info functions per trovare l'entry point reale.
+
+Architetture diverse: Su x86_64, i parametri sono passati via registri (rdi, rsi, ecc.); su x86, sono sullo stack.
+
+Estensioni utili: Se usi GEF o Pwndbg, puoi usare comandi aggiuntivi come entry-break per fermarti all'entry point.
+
+Comandi Riassuntivi
+Comando	Descrizione
+info functions	Mostra tutte le funzioni
+break main	Breakpoint all'inizio di main
+break *0x1234	Breakpoint all'indirizzo esatto
+info breakpoints	Lista breakpoint attivi
+run	Avvia il programma
+Se hai bisogno di ulteriori dettagli su un caso specifico, fammelo sapere! 😊
+

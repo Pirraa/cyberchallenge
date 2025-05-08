@@ -1,0 +1,21 @@
+objdump -d -> disassembla
+gdb ./nome_programma
+break *0x401196
+x/s 0x7ffdaa3facc0 -> stampa flag
+x/64bx 0x7ffdaa3facc0 -> stampa flag 64 byte
+x/64c 0x7ffdaa3facc0
+x/s 0x7ffdaa3facc0 -> stampa fag stringa
+
+Nelle chiamate a funzione su Linux x86_64, i parametri sono passati in questi registri (in ordine):
+rdi, rsi, rdx, rcx, r8, r9
+
+$eip o $rip contiene indirizzo prossima funzione da eseguire 
+
+Quando il programma va in crash, puoi ottenere il backtrace per capire meglio dove si verifica l'errore. 
+Dopo che il programma ha ricevuto il segnale di "Segmentation Fault", esegui il comando backtrace 
+(o semplicemente bt):
+
+
+
+
+

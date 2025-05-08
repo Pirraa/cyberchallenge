@@ -1,0 +1,33 @@
+(gdb) info functions
+All defined functions:
+
+Non-debugging symbols:
+0x0000000000401090  putchar@plt
+0x00000000004010a0  puts@plt
+0x00000000004010b0  printf@plt
+0x00000000004010c0  fflush@plt
+0x00000000004010d0  exit@plt
+0x00000000004010e0  usleep@plt
+(gdb) break usleep
+Breakpoint 1 at 0x4010e0
+(gdb) run
+Starting program: /home/francesco/cyber_new/slow_printer
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+Your flag is:
+CCIT{}
+Breakpoint 1, usleep (useconds=1000000) at ../sysdeps/posix/usleep.c:24
+24      ../sysdeps/posix/usleep.c: No such file or directory.
+(gdb) set $rdi=0
+(gdb) continue
+Continuing.
+CCIT{t}
+Breakpoint 1, usleep (useconds=2000000) at ../sysdeps/posix/usleep.c:24
+24      in ../sysdeps/posix/usleep.c
+(gdb) set $rdi=0
+(gdb) continue
+Continuing.
+CCIT{ti}
+Breakpoint 1, usleep (useconds=4000000) at ../sysdeps/posix/usleep.c:24
+24      in ../sysdeps/posix/usleep.c
+(gdb) exit

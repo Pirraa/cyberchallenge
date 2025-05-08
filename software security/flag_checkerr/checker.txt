@@ -1,0 +1,73 @@
+00004020  data_4020:
+00004020  54 00 00 00 c3 00 00 00 22 01 00 00 8b 01 00 00 df 01 00 00 44 02 00 00 b6 02 00 00 ea 02 00 00  T......."...........D...........
+00004040  5e 03 00 00 c3 03 00 00 22 04 00 00 8b 04 00 00 c0 04 00 00 1f 05 00 00 87 05 00 00 dc 05 00 00  ^.......".......................
+00004060  49 06 00 00 aa 06 00 00 f8 06 00 00 57 07 00 00 cb 07 00 00 fb 07 00 00 5a 08 00 00 cc 08 00 00  I...........W...........Z.......
+00004080  ff 08 00 00 42 09 00 00 b7 09 00 00 09 0a 00 00 7c 0a 00 00 e1 0a 00 00 40 0b 00 00 a4 0b 00 00  ....B...........|.......@.......
+000040a0  d5 0b 00 00 4b 0c 00 00 b4 0c 00 00 22 0d 00 00 87 0d 00 00 ff ff ff ff                          ....K......."...........
+
+Hai ottenuto una lista di int32_t little-endian, ovvero ogni 4 byte formano un numero. L’array termina con 0xffffffff, cioè -1
+
+int target_sums[] = {
+    0x00000054, // 84
+    0x000000c3, // 195
+    0x00000122, // 290
+    0x0000018b, // 395
+    0x000001df, // 479
+    0x00000244, // 580
+    0x000002b6, // 694
+    0x000002ea, // 746
+    0x0000035e, // 862
+    0x000003c3, // 963
+    0x00000422, // 1058
+    0x0000048b, // 1163
+    0x000004c0, // 1216
+    0x0000051f, // 1311
+    0x00000587, // 1415
+    0x000005dc, // 1500
+    0x00000649, // 1609
+    0x000006aa, // 1706
+    0x000006f8, // 1784
+    0x00000757, // 1879
+    0x000007cb, // 1995
+    0x000007fb, // 2043
+    0x0000085a, // 2138
+    0x000008cc, // 2252
+    0x000008ff, // 2303
+    0x00000942, // 2370
+    0x000009b7, // 2487
+    0x00000a09, // 2569
+    0x00000a7c, // 2684
+    0x00000ae1, // 2785
+    0x00000b40, // 2880
+    0x00000ba4, // 2980
+    0x00000bd5, // 3029
+    0x00000c4b, // 3147
+    0x00000cb4, // 3252
+    0x00000d22, // 3362
+    0x00000d87, // 3463
+    -1
+};
+
+Ogni carattere del flag viene sommato in modo cumulativo, e deve eguagliare esattamente i valori sopra. Quindi:
+
+flag[0] = target_sums[0]
+flag[1] = target_sums[1] - target_sums[0]
+flag[2] = target_sums[2] - target_sums[1]
+
+00001169    int64_t sub_1169(char* arg1, int32_t* arg2, int32_t arg3)
+
+00001175        char* var_10 = arg1
+00001179        int32_t* var_18 = arg2
+0000118a        int32_t var_1c_1 = arg3 + sx.d(*var_10)
+0000118a        
+00001195        if (*var_18 s< 0)
+000011ad            printf(format: "Well done: your flag is indeed C…", data_40c0)
+000011b7            exit(status: 0)
+000011b7            noreturn
+000011b7        
+000011c5        if (var_1c_1 == *var_18)
+000011c7            var_18 = &var_18[1]
+000011cc            var_10 = &var_10[1]
+000011e2            sub_1169(var_10, var_18, zx.q(var_1c_1))
+000011e2        
+0000120c        return sub_1169(var_10, var_18, zx.q(var_1c_1 - sx.d(*var_10)))

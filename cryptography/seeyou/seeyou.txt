@@ -1,0 +1,52 @@
+Analisi del Cifrario e Possibili Attacchi
+Il codice implementa un cifrario di Vigenère modificato con le seguenti caratteristiche:
+Chiave KEY: Lunghezza 8 caratteri, solo lettere minuscole (a-z).
+
+Funzione encrypt:
+Esegue uno shift mod 128 tra il carattere del messaggio e quello della chiave.
+Applica Base64 URL-safe all'output.
+
+Doppia cifratura:
+Il messaggio m viene cifrato prima con k1 = KEY[0:4] e poi con k2 = KEY[4:8].
+Strategie per Risalire alla Chiave Senza Brute-Force
+
+1. Attacco con Known Plaintext (KPA)
+Poiché conosciamo sia il messaggio originale (m) che il ciphertext finale (c), possiamo sfruttare questa informazione per ricostruire k1 e k2.
+
+Passaggi:
+Decifra c con k2 per ottenere d:
+Poiché c = encrypt(d, k2), possiamo invertire la funzione encrypt per ottenere d (usando la funzione decrypt fornita nel codice).
+Tuttavia, non conosciamo k2, quindi dobbiamo trovare un modo per aggirare questo problema.
+
+Sfrutta la struttura del messaggio:
+Il messaggio m inizia con "See " (4 caratteri), quindi la prima parte di d sarà encrypt("See ", k1).
+
+Poiché d è cifrato con k2 per produrre c, possiamo usare questa relazione per ridurre lo spazio delle chiavi.
+Ricostruisci k1 e k2:
+
+Per ogni possibile k1 (4 caratteri, a-z), calcola d = encrypt(m, k1).
+Poi, per ogni possibile k2 (4 caratteri, a-z), verifica se encrypt(d, k2) == c.
+Se sì, hai trovato k1 e k2.
+
+Complessità:
+Spazio di k1: 
+26^4=456976 possibilità.
+
+Spazio di k2: 
+26^4=456976 possibilità.
+
+Totale: 26^4×26^4=26^8
+(come il brute-force diretto su KEY).
+Tuttavia, poiché possiamo verificare k1 e k2 separatamente, possiamo ridurre il tempo a  26^4+26^4=913952
+
+2. Ottimizzazione con Meet-in-the-Middle
+Possiamo usare una tabella hash per memorizzare i risultati intermedi e ridurre il tempo:
+Genera tutti i possibili d = encrypt(m, k1) per ogni k1 e memorizzali in un dizionario.
+Genera tutti i possibili d_decrypt = decrypt(c, k2) per ogni k2.
+Cerca corrispondenze tra d e d_decrypt. Se trovi una corrispondenza, hai trovato k1 e k2.
+
+Vantaggio:
+Complessità: 
+26^4+26^4=913952 operazioni (circa 0.5-1 secondo).
+
+

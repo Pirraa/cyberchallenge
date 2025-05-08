@@ -1,0 +1,22 @@
+local_98 = [
+    0xb0, 0x27, 0xa1, 0x24, 0xa2, 0x26, 0xad, 0x17,
+    0xab, 0x2c, 0xe1, 0x2d, 0x9f, 0x1c, 0xa0, 0x8c,
+    0xc0, 0x7e, 0xff, 0x2d, 0x01, 0x10, 0x04, 0x70,
+    0xb4, 0xb1
+]
+def transform(local_98):
+    for i in range(0x1a):
+        b = local_98[i]
+        bVar1 = (~b + 0x4e) & 0xFF
+        bVar1 = (bVar1 * 4) & 0xFF
+        temp = ((bVar1 | ((~b + 0x4e) >> 6)) ^ 0x3f) & 0xFF
+        temp = ((temp << 2) | (bVar1 >> 6)) & 0xFF
+        bVar1 = (temp + 0x83) & 0xFF
+        bVar2 = i & 0xFF
+        bVar1 = (~((bVar1 * 0x20 | bVar1 >> 3) + bVar2)) & 0xFF
+        result = (bVar2 - ((-((bVar1 << 7 | bVar1 >> 1) + bVar2) ^ bVar2))) & 0xFF
+        local_98[i] = result
+    return local_98
+
+decoded = transform(local_98)
+print("".join(map(chr, decoded)))

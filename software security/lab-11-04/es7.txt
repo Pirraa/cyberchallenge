@@ -1,0 +1,53 @@
+Yes, you can access and print the contents of local_18 in GDB after hitting a breakpoint on the puts function. 
+
+Steps to Inspect and Print local_18 in GDB:
+Set a Breakpoint on puts: Set a breakpoint on the puts function, so that GDB will stop before the puts call is executed. 
+You can do this by setting a breakpoint at the address of puts.
+
+In your case, puts is at address 0x400530. Set the breakpoint using:
+(gdb) break *0x400530
+
+Run the Program: Start the program:
+(gdb) run
+
+Inspect local_18 After Hitting the Breakpoint: Once the program hits the puts breakpoint, you can access and print local_18 (the flag) at that point. T
+he value of local_18 is stored at RBP - 0x18.
+To print the value of local_18, use:
+This command will tell GDB to interpret the data at memory address RBP - 0x18 as a string (s for string).
+(gdb) x/s $rbp-0x18
+
+Continue Execution: After inspecting the value of local_18, you can continue executing the program by using:
+(gdb) continue
+Explanation of Commands:
+
+x/s $rbp-0x18: The x command in GDB is used to examine memory. 
+The /s format tells GDB to treat the memory at the given address as a string (ASCII characters). $rbp-0x18 is the address of local_18 (calculated as RBP - 0x18).
+
+
+Full Example:
+(gdb) break *0x400530
+(gdb) run
+(gdb) x/s $rbp-0x18
+0x2121217230783468: "YourFlagHere"
+(gdb) continue
+
+CODICE MAIN E ASSEMBLER
+undefined8 main(void)
+
+{
+  undefined8 local_18;
+  undefined1 local_10;
+  int local_c;
+  
+  local_c = 0;
+  local_18 = 0x2121217230783468;
+  local_10 = 0;
+  puts("What is the magic password?");
+  scanf("%d",&local_c);
+  if (local_c == 23412) {
+    printf("Correct! Your flag is: %s",&local_18);
+  }
+  return 0;
+}
+
+004006a1 48 8d 45 f0     LEA        RAX=>local_18,[RBP + -0x10]

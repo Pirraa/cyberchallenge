@@ -1,0 +1,19 @@
+echo "set \$eip = 0x08049276\ncontinue" > run_safe.gdb
+gdb -q -x run_safe.gdb ./nextgen_safe
+
+
+
+from pwn import *
+
+p = process('./nextgen_safe')
+p.sendline(b'something')  # bypassa input
+p.sendline(b'stillwrong') # non importa
+p.wait()
+
+# Attacchi GDB sul processo
+gdb.attach(p, gdbscript="""
+set $eip = 0x08049276
+continue
+""")
+
+p.interactive()

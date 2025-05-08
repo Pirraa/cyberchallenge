@@ -1,0 +1,331 @@
+SOLUZIONE ES 5 SW-0
+Esempio pratico con i comandi:
+Immagina di voler fermare il programma subito prima che il timer scada. Potresti fare qualcosa di simile:
+
+Imposta un breakpoint subito prima del select() nel codice (ad esempio, all'inizio della funzione main 
+o subito prima del select).
+
+gdb
+Copia
+Modifica
+gdb -q ./esercizio5
+(gdb) b *0x401469   # Dove 0x401469 è il punto in cui il timer viene impostato o il select viene eseguito
+(gdb) run           # Avvia il programma
+Dopo aver raggiunto il breakpoint, puoi modificare il valore del timer. Una volta fermato al breakpoint, 
+puoi cambiare il valore della variabile che controlla il timeout (ad esempio, se è in un registro o in una 
+variabile di memoria).
+
+gdb
+Copia
+Modifica
+set {long}($rbp - 0x120) = 20   # Cambia il valore del timeout a 20 secondi
+continue                       # Continua l'esecuzione
+Ora il programma aspetterà 20 secondi invece di 1, e tu avrai abbastanza tempo per rispondere prima 
+che venga stampato "Too slow."
+
+
+
+
+Dump of assembler code for function main:
+   0x00000000004012d6 <+0>:     endbr64
+   0x00000000004012da <+4>:     push   %rbp
+   0x00000000004012db <+5>:     mov    %rsp,%rbp
+   0x00000000004012de <+8>:     push   %rbx
+   0x00000000004012df <+9>:     sub    $0x158,%rsp
+   0x00000000004012e6 <+16>:    mov    %edi,-0x154(%rbp)
+   0x00000000004012ec <+22>:    mov    %rsi,-0x160(%rbp)
+   0x00000000004012f3 <+29>:    mov    %fs:0x28,%rax
+   0x00000000004012fc <+38>:    mov    %rax,-0x18(%rbp)
+   0x0000000000401300 <+42>:    xor    %eax,%eax
+   0x0000000000401302 <+44>:    movabs $0x17ad26a224a127b0,%rax
+   0x000000000040130c <+54>:    movabs $0x8ca01c9f2de12cab,%rdx
+   0x0000000000401316 <+64>:    mov    %rax,-0x90(%rbp)
+   0x000000000040131d <+71>:    mov    %rdx,-0x88(%rbp)
+   0x0000000000401324 <+78>:    movabs $0x700410012dff7ec0,%rax
+   0x000000000040132e <+88>:    mov    %rax,-0x80(%rbp)
+   0x0000000000401332 <+92>:    movw   $0xb1b4,-0x78(%rbp)
+   0x0000000000401338 <+98>:    call   0x401140 <clock@plt>
+   0x000000000040133d <+103>:   mov    %eax,%edi
+   0x000000000040133f <+105>:   call   0x401120 <srandom@plt>
+   0x0000000000401344 <+110>:   call   0x4011b0 <random@plt>
+   0x0000000000401349 <+115>:   mov    %eax,-0x144(%rbp)
+   0x000000000040134f <+121>:   call   0x4011b0 <random@plt>
+   0x0000000000401354 <+126>:   mov    %eax,-0x140(%rbp)
+   0x000000000040135a <+132>:   mov    -0x144(%rbp),%edx
+   0x0000000000401360 <+138>:   mov    -0x140(%rbp),%eax
+   0x0000000000401366 <+144>:   add    %edx,%eax
+   0x0000000000401368 <+146>:   mov    %eax,-0x13c(%rbp)
+   0x000000000040136e <+152>:   mov    $0x0,%eax
+   0x0000000000401373 <+157>:   mov    $0x10,%ecx
+   0x0000000000401378 <+162>:   lea    -0x110(%rbp),%rdx
+   0x000000000040137f <+169>:   mov    %rdx,%rdi
+   0x0000000000401382 <+172>:   cld
+   0x0000000000401383 <+173>:   rep stos %rax,%es:(%rdi)
+   0x0000000000401386 <+176>:   mov    %edi,%eax
+   0x0000000000401388 <+178>:   mov    %ecx,%edx
+   0x000000000040138a <+180>:   mov    %edx,-0x138(%rbp)
+   0x0000000000401390 <+186>:   mov    %eax,-0x134(%rbp)
+   0x0000000000401396 <+192>:   mov    0x2d03(%rip),%rax        # 0x4040a0 <stdin@@GLIBC_2.2.5>
+   0x000000000040139d <+199>:   mov    %rax,%rdi
+   0x00000000004013a0 <+202>:   call   0x401190 <fileno@plt>
+   0x00000000004013a5 <+207>:   cltd
+   0x00000000004013a6 <+208>:   shr    $0x1a,%edx
+--Type <RET> for more, q to quit, c to continue without paging--
+   0x00000000004013a9 <+211>:   add    %edx,%eax
+   0x00000000004013ab <+213>:   and    $0x3f,%eax
+   0x00000000004013ae <+216>:   sub    %edx,%eax
+   0x00000000004013b0 <+218>:   mov    $0x1,%edx
+   0x00000000004013b5 <+223>:   mov    %eax,%ecx
+   0x00000000004013b7 <+225>:   shl    %cl,%rdx
+   0x00000000004013ba <+228>:   mov    %rdx,%rax
+   0x00000000004013bd <+231>:   mov    %rax,%rbx
+   0x00000000004013c0 <+234>:   mov    0x2cd9(%rip),%rax        # 0x4040a0 <stdin@@GLIBC_2.2.5>
+   0x00000000004013c7 <+241>:   mov    %rax,%rdi
+   0x00000000004013ca <+244>:   call   0x401190 <fileno@plt>
+   0x00000000004013cf <+249>:   lea    0x3f(%rax),%edx
+   0x00000000004013d2 <+252>:   test   %eax,%eax
+   0x00000000004013d4 <+254>:   cmovs  %edx,%eax
+   0x00000000004013d7 <+257>:   sar    $0x6,%eax
+   0x00000000004013da <+260>:   mov    %eax,%ecx
+   0x00000000004013dc <+262>:   movslq %ecx,%rax
+   0x00000000004013df <+265>:   mov    -0x110(%rbp,%rax,8),%rax
+   0x00000000004013e7 <+273>:   or     %rax,%rbx
+   0x00000000004013ea <+276>:   mov    %rbx,%rdx
+   0x00000000004013ed <+279>:   movslq %ecx,%rax
+   0x00000000004013f0 <+282>:   mov    %rdx,-0x110(%rbp,%rax,8)
+   0x00000000004013f8 <+290>:   movq   $0x1,-0x120(%rbp)
+   0x0000000000401403 <+301>:   movq   $0x0,-0x118(%rbp)
+   0x000000000040140e <+312>:   mov    0x2c8b(%rip),%rax        # 0x4040a0 <stdin@@GLIBC_2.2.5>
+   0x0000000000401415 <+319>:   mov    %rax,%rdi
+   0x0000000000401418 <+322>:   call   0x401190 <fileno@plt>
+   0x000000000040141d <+327>:   mov    %eax,-0x130(%rbp)
+   0x0000000000401423 <+333>:   mov    -0x140(%rbp),%edx
+   0x0000000000401429 <+339>:   mov    -0x144(%rbp),%eax
+   0x000000000040142f <+345>:   mov    %eax,%esi
+   0x0000000000401431 <+347>:   lea    0xbcc(%rip),%rdi        # 0x402004
+   0x0000000000401438 <+354>:   mov    $0x0,%eax
+   0x000000000040143d <+359>:   call   0x401160 <printf@plt>
+   0x0000000000401442 <+364>:   mov    -0x130(%rbp),%eax
+   0x0000000000401448 <+370>:   lea    0x1(%rax),%edi
+   0x000000000040144b <+373>:   lea    -0x120(%rbp),%rdx
+   0x0000000000401452 <+380>:   lea    -0x110(%rbp),%rax
+   0x0000000000401459 <+387>:   mov    %rdx,%r8
+   0x000000000040145c <+390>:   mov    $0x0,%ecx
+   0x0000000000401461 <+395>:   mov    $0x0,%edx
+   0x0000000000401466 <+400>:   mov    %rax,%rsi
+   0x0000000000401469 <+403>:   call   0x4011a0 <select@plt>
+   0x000000000040146e <+408>:   mov    %eax,-0x12c(%rbp)
+--Type <RET> for more, q to quit, c to continue without paging--
+   0x0000000000401474 <+414>:   cmpl   $0xffffffff,-0x12c(%rbp)
+   0x000000000040147b <+421>:   jne    0x4014b3 <main+477>
+   0x000000000040147d <+423>:   call   0x401110 <__errno_location@plt>
+   0x0000000000401482 <+428>:   mov    (%rax),%eax
+   0x0000000000401484 <+430>:   mov    %eax,%edi
+   0x0000000000401486 <+432>:   call   0x4011e0 <strerror@plt>
+   0x000000000040148b <+437>:   mov    %rax,%rdx
+   0x000000000040148e <+440>:   mov    0x2c2b(%rip),%rax        # 0x4040c0 <stderr@@GLIBC_2.2.5>
+   0x0000000000401495 <+447>:   lea    0xb75(%rip),%rsi        # 0x402011
+   0x000000000040149c <+454>:   mov    %rax,%rdi
+   0x000000000040149f <+457>:   mov    $0x0,%eax
+   0x00000000004014a4 <+462>:   call   0x401180 <fprintf@plt>
+   0x00000000004014a9 <+467>:   mov    $0x1,%edi
+   0x00000000004014ae <+472>:   call   0x4011d0 <exit@plt>
+   0x00000000004014b3 <+477>:   cmpl   $0x0,-0x12c(%rbp)
+   0x00000000004014ba <+484>:   jne    0x4014cd <main+503>
+   0x00000000004014bc <+486>:   lea    0xb65(%rip),%rdi        # 0x402028
+   0x00000000004014c3 <+493>:   call   0x401130 <puts@plt>
+   0x00000000004014c8 <+498>:   jmp    0x401697 <main+961>
+   0x00000000004014cd <+503>:   lea    -0x70(%rbp),%rcx
+   0x00000000004014d1 <+507>:   mov    -0x130(%rbp),%eax
+   0x00000000004014d7 <+513>:   mov    $0x50,%edx
+   0x00000000004014dc <+518>:   mov    %rcx,%rsi
+   0x00000000004014df <+521>:   mov    %eax,%edi
+   0x00000000004014e1 <+523>:   call   0x401170 <read@plt>
+   0x00000000004014e6 <+528>:   mov    %eax,-0x128(%rbp)
+   0x00000000004014ec <+534>:   cmpl   $0x0,-0x128(%rbp)
+   0x00000000004014f3 <+541>:   jns    0x40152b <main+597>
+   0x00000000004014f5 <+543>:   call   0x401110 <__errno_location@plt>
+   0x00000000004014fa <+548>:   mov    (%rax),%eax
+   0x00000000004014fc <+550>:   mov    %eax,%edi
+   0x00000000004014fe <+552>:   call   0x4011e0 <strerror@plt>
+   0x0000000000401503 <+557>:   mov    %rax,%rdx
+   0x0000000000401506 <+560>:   mov    0x2bb3(%rip),%rax        # 0x4040c0 <stderr@@GLIBC_2.2.5>
+   0x000000000040150d <+567>:   lea    0xb1f(%rip),%rsi        # 0x402033
+   0x0000000000401514 <+574>:   mov    %rax,%rdi
+   0x0000000000401517 <+577>:   mov    $0x0,%eax
+   0x000000000040151c <+582>:   call   0x401180 <fprintf@plt>
+   0x0000000000401521 <+587>:   mov    $0x1,%edi
+   0x0000000000401526 <+592>:   call   0x4011d0 <exit@plt>
+   0x000000000040152b <+597>:   lea    -0x70(%rbp),%rax
+   0x000000000040152f <+601>:   mov    %rax,%rdi
+   0x0000000000401532 <+604>:   call   0x4011c0 <atoi@plt>
+   0x0000000000401537 <+609>:   mov    %eax,-0x124(%rbp)
+--Type <RET> for more, q to quit, c to continue without paging--
+   0x000000000040153d <+615>:   mov    -0x124(%rbp),%eax
+   0x0000000000401543 <+621>:   cmp    -0x13c(%rbp),%eax
+   0x0000000000401549 <+627>:   jne    0x40168b <main+949>
+   0x000000000040154f <+633>:   lea    0xaf2(%rip),%rdi        # 0x402048
+   0x0000000000401556 <+640>:   call   0x401130 <puts@plt>
+   0x000000000040155b <+645>:   movl   $0x0,-0x148(%rbp)
+   0x0000000000401565 <+655>:   jmp    0x40166d <main+919>
+   0x000000000040156a <+660>:   mov    -0x148(%rbp),%eax
+   0x0000000000401570 <+666>:   movzbl -0x90(%rbp,%rax,1),%eax
+   0x0000000000401578 <+674>:   mov    %al,-0x149(%rbp)
+   0x000000000040157e <+680>:   notb   -0x149(%rbp)
+   0x0000000000401584 <+686>:   addb   $0x4e,-0x149(%rbp)
+   0x000000000040158b <+693>:   movzbl -0x149(%rbp),%eax
+   0x0000000000401592 <+700>:   shr    $0x6,%al
+   0x0000000000401595 <+703>:   mov    %eax,%edx
+   0x0000000000401597 <+705>:   movzbl -0x149(%rbp),%eax
+   0x000000000040159e <+712>:   shl    $0x2,%eax
+   0x00000000004015a1 <+715>:   or     %edx,%eax
+   0x00000000004015a3 <+717>:   mov    %al,-0x149(%rbp)
+   0x00000000004015a9 <+723>:   xorb   $0x3f,-0x149(%rbp)
+   0x00000000004015b0 <+730>:   movzbl -0x149(%rbp),%eax
+   0x00000000004015b7 <+737>:   shr    $0x6,%al
+   0x00000000004015ba <+740>:   mov    %eax,%edx
+   0x00000000004015bc <+742>:   movzbl -0x149(%rbp),%eax
+   0x00000000004015c3 <+749>:   shl    $0x2,%eax
+   0x00000000004015c6 <+752>:   or     %edx,%eax
+   0x00000000004015c8 <+754>:   mov    %al,-0x149(%rbp)
+   0x00000000004015ce <+760>:   subb   $0x7d,-0x149(%rbp)
+   0x00000000004015d5 <+767>:   movzbl -0x149(%rbp),%eax
+   0x00000000004015dc <+774>:   shr    $0x3,%al
+   0x00000000004015df <+777>:   mov    %eax,%edx
+   0x00000000004015e1 <+779>:   movzbl -0x149(%rbp),%eax
+   0x00000000004015e8 <+786>:   shl    $0x5,%eax
+   0x00000000004015eb <+789>:   or     %edx,%eax
+   0x00000000004015ed <+791>:   mov    %al,-0x149(%rbp)
+   0x00000000004015f3 <+797>:   mov    -0x148(%rbp),%eax
+   0x00000000004015f9 <+803>:   add    %al,-0x149(%rbp)
+   0x00000000004015ff <+809>:   notb   -0x149(%rbp)
+   0x0000000000401605 <+815>:   movzbl -0x149(%rbp),%eax
+   0x000000000040160c <+822>:   shr    %al
+   0x000000000040160e <+824>:   mov    %eax,%edx
+   0x0000000000401610 <+826>:   movzbl -0x149(%rbp),%eax
+   0x0000000000401617 <+833>:   shl    $0x7,%eax
+   0x000000000040161a <+836>:   or     %edx,%eax
+--Type <RET> for more, q to quit, c to continue without paging--
+   0x000000000040161c <+838>:   mov    %al,-0x149(%rbp)
+   0x0000000000401622 <+844>:   mov    -0x148(%rbp),%eax
+   0x0000000000401628 <+850>:   add    %al,-0x149(%rbp)
+   0x000000000040162e <+856>:   negb   -0x149(%rbp)
+   0x0000000000401634 <+862>:   mov    -0x148(%rbp),%eax
+   0x000000000040163a <+868>:   xor    %al,-0x149(%rbp)
+   0x0000000000401640 <+874>:   negb   -0x149(%rbp)
+   0x0000000000401646 <+880>:   mov    -0x148(%rbp),%eax
+   0x000000000040164c <+886>:   add    %al,-0x149(%rbp)
+   0x0000000000401652 <+892>:   mov    -0x148(%rbp),%eax
+   0x0000000000401658 <+898>:   movzbl -0x149(%rbp),%edx
+   0x000000000040165f <+905>:   mov    %dl,-0x90(%rbp,%rax,1)
+   0x0000000000401666 <+912>:   addl   $0x1,-0x148(%rbp)
+   0x000000000040166d <+919>:   cmpl   $0x19,-0x148(%rbp)
+   0x0000000000401674 <+926>:   jbe    0x40156a <main+660>
+   0x000000000040167a <+932>:   lea    -0x90(%rbp),%rax
+   0x0000000000401681 <+939>:   mov    %rax,%rdi
+   0x0000000000401684 <+942>:   call   0x401130 <puts@plt>
+   0x0000000000401689 <+947>:   jmp    0x401697 <main+961>
+   0x000000000040168b <+949>:   lea    0x9bf(%rip),%rdi        # 0x402051
+   0x0000000000401692 <+956>:   call   0x401130 <puts@plt>
+   0x0000000000401697 <+961>:   nop
+   0x0000000000401698 <+962>:   mov    -0x18(%rbp),%rax
+   0x000000000040169c <+966>:   xor    %fs:0x28,%rax
+   0x00000000004016a5 <+975>:   je     0x4016ac <main+982>
+   0x00000000004016a7 <+977>:   call   0x401150 <__stack_chk_fail@plt>
+   0x00000000004016ac <+982>:   add    $0x158,%rsp
+   0x00000000004016b3 <+989>:   pop    %rbx
+   0x00000000004016b4 <+990>:   pop    %rbp
+   0x00000000004016b5 <+991>:   ret
+End of assembler dump.
+
+
+
+
+🔹 1. Dove mettere i breakpoint:
+✅ Breakpoint dopo la printf per leggere i numeri generati
+Hai detto bene: il punto in cui stampa i due numeri (printf("%d + %d = ?\n")) è all’indirizzo 0x40143d.
+
+💡 Ma i due numeri random sono già stati generati prima, alle istruzioni:
+
+0x401344: random() → memorizzato in -0x144(%rbp)
+
+0x40134f: random() → memorizzato in -0x140(%rbp)
+
+Poi somma a -0x13c(%rbp), ma non serve per il momento.
+
+👉 Quindi puoi mettere il breakpoint direttamente a 0x40143d, che è appena prima della stampa, per leggere i due valori generati:
+
+
+(gdb) b *0x40143d
+Poi fai:
+
+
+(gdb) r
+e quando sei al breakpoint:
+
+
+(gdb) p *(int*)($rbp - 0x144)  # primo numero
+(gdb) p *(int*)($rbp - 0x140)  # secondo numero
+✅ Breakpoint sulla read() per inserire la somma
+La read() è chiamata a:
+
+0x4014e1
+
+👉 Metti un breakpoint lì:
+
+bash
+Copia
+Modifica
+(gdb) b *0x4014e1
+Quando ci arrivi, puoi inserire il risultato corretto (o forzarlo in memoria se vuoi).
+
+🔹 2. Dove è salvato il timeout di 1 secondo?
+Ottima domanda.
+
+Nel C, avevi:
+
+
+local_128.tv_sec = 1;
+local_128.tv_usec = 0;
+Nel disassemblato:
+
+A 0x4013f8 → movq $0x1,-0x120(%rbp) → tv_sec = 1
+
+A 0x401403 → movq $0x0,-0x118(%rbp) → tv_usec = 0
+
+👉 Quindi se vuoi modificare il timeout per darti più tempo, puoi in GDB fare:
+(gdb) set *(long*)($rbp - 0x120) = 10   # 10 secondi
+(gdb) set *(long*)($rbp - 0x118) = 0    # 0 microsecondi
+
+
+
+🔹 3. Riassunto operazioni in GDB
+Breakpoint dopo printf:
+
+
+(gdb) b *0x40143d
+Breakpoint su read:
+
+
+(gdb) b *0x4014e1
+Avvia programma:
+
+
+(gdb) r
+Al primo breakpoint (printf) – leggi i numeri:
+
+
+(gdb) p *(int*)($rbp - 0x144)
+(gdb) p *(int*)($rbp - 0x140)
+(Opzionale) Aumenta timeout:
+
+
+(gdb) set *(long*)($rbp - 0x120) = 10
+Continua fino al breakpoint su read:
+
+
+(gdb) c
+Inserisci la somma corretta (a mano o scrivila nella memoria):
+
+
+(gdb) p *(char*)($rbp - 0x70) = '1'  # ...ecc. oppure usa `call (void)strcpy(...)`

@@ -1,0 +1,47 @@
+Il codice fornito mostra che:
+
+Input: Accetta un messaggio in esadecimale (text).
+Preparazione:
+Converte l'input in bytes.
+Aggiunge la flag al messaggio (text + flag.encode()).
+Applica il padding PKCS#7 (con pad(to_encrypt, 16)) per allineare a blocchi di 16 byte.
+
+Cifratura:
+Divide il testo in blocchi da 16 byte.
+Usa ChaCha20 (non ECB/CBC!) per cifrare ogni blocco con lo stesso key/nonce.
+
+Problema di Sicurezza
+ChaCha20 è un cifrario stream-based, ma l'implementazione è vulnerabile perché:
+Riutilizzo del nonce: Se key e nonce sono fissi per tutte le cifrature, 
+si rompe la sicurezza di ChaCha20 (vedi attacco).
+Flag aggiunta in chiaro: La flag è concatenata al messaggio prima della cifratura,
+quindi possiamo sfruttare attacchi di differenza.
+
+Attacco per Estrazione della Flag
+Ecco come procedere:
+
+Step 1: Conferma del Riutilizzo del Nonce
+Invia due messaggi identici e verifica se il ciphertext è lo stesso:
+m1 = "61616161616161616161616161616161"  # "aaaaaaaaaaaaaaaa" in hex
+m2 = "61616161616161616161616161616161"
+ct1 = encrypt(m1)
+ct2 = encrypt(m2)
+assert ct1 == ct2  # Se vero, il nonce è riutilizzato!
+
+Step 2: Attacco con Known Plaintext
+Invia un messaggio noto (es. 16 byte di 'a'):
+plaintext = "a" * 16
+ciphertext = encrypt(plaintext.encode().hex())
+
+Ottieni il keystream:
+ChaCha20 fa ciphertext = plaintext XOR keystream.
+Se hai plaintext e ciphertext, puoi calcolare il keystream:
+keystream = xor(plaintext.encode(), bytes.fromhex(ciphertext)[:16])
+
+
+Decifra la flag:
+La flag è cifrata con lo stesso keystream:
+# Supponendo che la flag sia nel blocco successivo ai tuoi 16 byte
+flag_ct = bytes.fromhex(ciphertext)[16:32]
+flag = xor(keystream, flag_ct)
+print(flag.decode())
